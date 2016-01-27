@@ -1,0 +1,34 @@
+How TO! Use Python 2.7 and 3.4 together.
+
+Okay so I just got this all to work, and I have a working API, so I'm making a small 
+guide so you guys can do the same thing, but without the headache.
+
+Step 1: 
+Download Python version 3.4: https://www.python.org/downloads/release/python-343/
+
+If you have 2.7 as well, keep reading below.
+The download will be installed to your C:/Windows/PythonXX/ Location, XX being the version
+number. If you have Python 2.7, there will be a Python27 there.
+
+On the command line, you need to run:
+py -2 filename.py 
+in order to specify that the system run using Python2.7
+
+py -3 filename.py is what you need to use to run with Python 3.4
+
+Step 2:
+There is a zip, for a package called Imdbpie: https://github.com/richardasaurus/imdb-pie
+It might not be necessary to even download, but I did. 
+
+Step 3: To install this package, you use pip. Pip and Setuptools should come 
+already installed on your python, so hopefully it should work. On the command line, use
+
+(If you have 2 versions of python) py -3 -m pip install imdbpie
+or if you have one version only:
+python -m pip install imdbpie
+
+And it should collect imdbpie and work for you.
+It seems to work just as well as the one we had before, but this time, on imdbpie.
+ 
+
+
