@@ -1,0 +1,60 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\title{Product Backlog (Requirements Document)}
+\date{January 2016}
+\author{Matthew Morris \and Terik Brunson \and Justin Hershberger \and Caleb Yearsley \and Corbin Cutler}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@subsection
+    \else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\begin{document}
+
+\maketitle
+
+\section{Problem Statement}
+Insert Problem Statement from Project Charter here.
+
+\section{Background Information}
+
+\section{Requirements}
+
+\subsection{Functional Requirements}
+\begin{enumerate}
+    \item As a user, I would like to be able to create an account.
+    \item As a user, I would like to be able to log in and out of my account.
+    \item As a user, I would like to be able to change my account information.
+    \item As a user, I would like to be able to add others' accounts as friends.
+    \item As a user, I would like to be able to view my list of friends.
+    \item As a user, I would like to be able to view my profile page, and friends' profile pages.
+    \item As a user, I would like to be able to post movie reviews and my rating of that movie.
+    \item As a user, I would like to be able to make a list of movies that I can post.
+    \item As a user, I would like to be able to comment on others' movie reviews and rating.
+    \item As a user, I would like to be able to 'like' a post made by a user.
+    \item As a user, I would like to be able to view highest rated movies among critics, friends, and other website users.
+    \item As a user, I would like to be able to view lowest rated movies among critics, friends, and other website users.
+    \item As a user, I would like to be able to search for a movie and view information about that movie, such as genre, actors, director, writers, producers, links to trailers, award nominations, and awards.
+    \item As a user, I would like to be able to see what movies are popular right now.
+    \item As a user, I would like to be able to 
+\end{enumerate}
+
+\subsection{Non-Functional Requirements}
+\begin{enumerate}
+    \item Use IMDB's API.
+    \item Create and store information in our PostgreSQL database.
+    \item Program in Python, Javascript, and Boostrap.
+\end{enumerate}
+
+\end{document}
