@@ -1,0 +1,43 @@
+Justin Hershberger
+CS 3450 
+Project Charter 
+Group 3: Matt Morris, Caleb Yearsley, Terik Brunson, Justin Hershberger
+1/20/16
+
+Problem Statement:
+	Many people love movies and TV shows but they don’t always agree with critic reviews.
+	A lot of times, a personal friend or family member’s opinion can affect whether or not
+	someone will watch a certain movie or TV show but getting that opinion can be a bit of
+	a hassle so naturally, shows go unwatched. Our project will be a form of social media 
+	and a movie/TV show review database but will be different from what is available today 
+	because it will be a combination of both so users can get their very own suggested top 
+	10, top 100, etc. from the “friends” that they decide to have on this social media in 
+	order to get a more personal list of what to watch.
+	
+Project Objectives: 
+	Our goal is to create a friendly, interesting social media web application that allows 
+	users to login and browse what their friends are watching as well as create their own 
+	personal page that shows genres they like, favorite movies, favorite TV shows, actors, 
+	etc. We want the feel of a Facebook but with the information of Rotten Tomatoes or IMDB
+	in order to achieve the ultimate website for getting ideas for shows and spreading your 
+	own individual opinion. We want the users to be able to look up any movie or show that 
+	they want and post their own review of it so that their friends can see. There’s a lot 
+	of good entertainment that goes unwatched simply because people haven’t suggested a certain 
+	show to their friends and we want to bridge that gap.
+Stakeholders:
+	Current reviewing database websites such as Rotten Tomatoes and IMDB will want to be able 
+	to integrate their reviews and suggestions with our website in order to increase traffic 
+	to their website as well as promote ours hopefully. The users will be people that enjoy 
+	watching movies or TV shows and then spreading their opinion of the show they watched to
+	their friends. Users will also use our website to find new shows to watch.
+Deliverables:
+	At first we want to develop and design the basic layout of our social media aspect. We want
+	people to enjoy being on our website and we can’t accomplish that if it’s boring.  Next, we 
+	will implement a rating system for each movie or TV show. Then we will integrate movie and 
+	TV show databases so that the users can browse and rate them using our rating system. We hope
+	to do this using IMDB’s and Rotten Tomatoes’ API. Finally we will integrate a login system so 
+	that the user can login to their own personal page and rate based on their own opinions. We are 
+	planning on using html, css, JavaScript, and Python for our languages. We also will be using 
+	bootstrap for a framework and GitHub for version control. For the database side we will use SQL. 
+
+
