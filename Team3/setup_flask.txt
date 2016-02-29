@@ -1,0 +1,48 @@
+The Micro Web Application Framework - Flask
+
+Ajax: a client-side script that communicates to and from a server/database without the need for a postback or a complete page refresh.
+
+The reason why the definition of an ajax request is important, is because we are going to need a server/database.
+We can essentially perform ajax requests from a Javascript file, to the server that contains a Python file.
+It will allow us to GET and POST data from and to the server.  In this case, our servers will be OUR local machines.
+
+Before I start explaining how to install and utilize flask, you WILL need a couple things first.
+	1) You will need to be able to execute 'python' from the command line.
+	2) You will need something called 'pip', this is automatically installed if you have Python 3.4.x (which is what we need to be using).
+
+
+For Mac:
+	One of the two commands should work to install a vurtal environment for our application.
+	$ sudo easy_install virtualenv
+		OR
+	$ sudo pip install virtualenv
+
+For Windows:
+	You should be able to simply use the command: 'pip install virtualenv' (I am using the Git Bash).
+
+Once again, if you don't have pip/Python3.4.x, you are going to have a bad time.
+
+After this, inside the folder that will contain the project; use the following command:
+	$ virtualenv venv
+
+Now, last but not least: INSTALL FLASK!
+	$ pip install Flask
+
+
+====================================================
+If we would like to run our server, try the following:
+
+hello_world.py:
+	from flask import Flask
+	app - Flask(__name__)
+
+	@app.route('/')
+	def hello_world():
+		return 'Hello World!'
+
+	if __name__ == '__main__':
+		app.run()
+
+Now, in a terminal: $ python hello_world.py
+
+Now we will have access to our localhost on port 5000 (localhost:5000)
