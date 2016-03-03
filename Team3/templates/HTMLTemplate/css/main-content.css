@@ -1,7 +1,8 @@
 
 #main-content{
 	display:block;
-	margin-right:250px;
+	margin-right: 0;
+	margin-left: 0;
 	margin-bottom: 20px;
 	background-color: white;
 	outline: 1px solid black;
