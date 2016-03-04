@@ -10,6 +10,7 @@
 }
 #wrapper {
     padding-left: 0;
+    /*margin-right: -250px;*/
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
@@ -29,6 +30,7 @@
 }
 #wrapper.toggled {
     padding-left: 250px;
+    margin-left: 250px;
 }
 
 #sidebar-wrapper {
@@ -41,6 +43,7 @@
     margin-left: -250px;
     overflow-y: auto;
     background: #000;
+    border-right: 2px solid limegreen;
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
@@ -50,12 +53,15 @@
 	top: 0;
     z-index: 1000;
     position: fixed;
-    right: 250px;
-    width: 250px;
+    right: 230px;
+    width: 0px;
     height: 100%;
     margin-right: -250px;
-    overflow-y: auto;
+    overflow: hidden;
+    overflow-y: scroll;
+    overflow-x: hidden;
     background: #000;
+    border-left: 2px solid limegreen;
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
@@ -67,7 +73,7 @@
 }
 
 #wrapper.toggled #sidebar-wrapper2 {
-    width: 250px;
+    width: 280px;
 }
 
 #page-content-wrapper {
@@ -134,18 +140,24 @@
 @media(min-width:768px) {
     #wrapper {
         padding-left: 250px;
+        margin-right: 0;
     }
 
     #wrapper.toggled {
-        padding-left: 0;
+        padding-left: 250px;
+        margin-left: 250px;
     }
 
     #sidebar-wrapper {
         width: 250px;
     }
 
-    #wrapper.toggled #sidebar-wrapper {
-        width: 0;
+    #sidebar-wrapper2 {
+        width: 280px;
+    }
+
+    #wrapper.toggled #sidebar-wrapper2 {
+        width: 0px;
     }
 
     #page-content-wrapper {
@@ -160,5 +172,10 @@
 }
 
 body {
+<<<<<<< HEAD
 	background-color: pink;
 }
+=======
+	background-color: limegreen;
+}
+>>>>>>> 536ca8f6581cb28baeadfd856aef264102d91cf3
