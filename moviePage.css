@@ -1,19 +1,7 @@
-#movie-body{
-	background-color: blue;
-	width: 100%;
-	margin: auto;
-	padding: 20px;
-
-}
-
-#site-body{
-    width: 95%;
-    margin: auto;
-    min-height: 480px;
-	background-color: rgba(255, 255, 255, 0.45);
-	padding-top: 50px;
-	padding-left: 20px;
-	padding-right: 20px;
-  padding-bottom: 30px;
-
+#movie-content{
+	display:block;
+	margin-right:250px;
+	margin-bottom: 20px;
+	background-color: white;
+	outline: 1px solid black;
 }
