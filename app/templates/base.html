@@ -99,6 +99,17 @@
         </div>
         <!-- /#sidebar-wrapper -->
     <!-- /.container -->
+
+    <hr>
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <ul>
+          {% for message in messages %}
+              <li>{{ message }} </li>
+          {% endfor %}
+          </ul>
+        {% endif %}
+      {% endwith %}
   <div style = "position: absolute;
                 left: 15%;
                 top: 8%;
