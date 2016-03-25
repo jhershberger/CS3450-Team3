@@ -1,5 +1,11 @@
 $(document).ready(function(){console.log("this is a test!@!@!@!")})
-
+$(document).ready(function(){
+	$('#getMovieInfo').click(getInfo)
+	$(#posts).append("<div><img src= '" + response + "'" + "<div>")
+})
+function getInfo(){
+	
+}
 $(function(){
 	$('#get-movie').click(function(){
 		var id = $('#id-input').val()
@@ -12,6 +18,7 @@ $(function(){
 			data: {'var': id},
 			success: function(response) {
 				console.log("response: ", response)
+
 			}
 		});
 	});
