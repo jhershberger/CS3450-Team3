@@ -16,6 +16,7 @@ while x<15:
     temp = random.randint(1, 249)
     t = listOfPopularMovies[temp]
     tid = t["tconst"]
+    print(t)
     print (tid)
     print (t["title"] + " is the " + str(temp) +"th rated movie")
     print ("It's score is: " + str(t["rating"]))
