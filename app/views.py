@@ -39,6 +39,7 @@ def moviePage():
         rating = t["rating"]
         actor = str(title.cast_summary[0].name)
         director = str(title.directors_summary[0].name)
+
         return render_template("moviePage.html", title=t["title"], year=year, rating=rating, actor=actor, director=director)  # render the moviePage template
 
 @app.route('/BasicSearchResults')
