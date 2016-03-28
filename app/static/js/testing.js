@@ -3,8 +3,6 @@ $(document).ready(function(){
 
 
 		var id = $('#id-input').val()
-		console.log("id: ", id)
-		console.log("clicked!")
 		$.ajax({
 			type: 'POST',
 			url: '/testSERVER',
@@ -25,7 +23,7 @@ $(document).ready(function(){
 					console.log(obj.list[i]);
 					// console.log(obj.list[i].image.url);
 					// webbrowser.open(obj.list[i].image.url);
-					appendDom(obj.list[i],obj.title[i],obj.score[i],obj.director[i]);
+					appendDom(obj.list[i],obj.title[i],obj.score[i]);
 
 					i++;
 				}
@@ -35,6 +33,6 @@ $(document).ready(function(){
 		});
 })
 
-function appendDom(response,title,score,director){
-	$('#main-block').append('<div id="new_block"><img id="poster_image" src="' + response + '"></img><h1>'+ title +'</h1>'+'<h1>'+ score +'</h1>'+'<h1>'+ director +'</h1><div>')
+function appendDom(response,title,score){
+	$('#main-block').append('<div id="new_block"><a href ="/moviePage" ><img id="poster_image" src="' + response + '"></img></a><h1>'+ title +'</h1>'+'<h1>'+ score +'</h1><div>')
 }

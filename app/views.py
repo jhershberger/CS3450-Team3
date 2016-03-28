@@ -2,7 +2,6 @@ from flask import render_template, flash, redirect
 from app import app
 from .forms import LoginForm
 from imdbpie import Imdb
-<<<<<<< HEAD
 from random import randint
 import webbrowser
 import json
@@ -18,9 +17,9 @@ r = requests.get(url)
 config = r.json()
 base_url = 'https://image.tmdb.org/t/p/'
 max_size = 'original'
-=======
+
 import random
->>>>>>> c5718c1cb0cd724834cfb1407271671ce6e7b35a
+
 
 @app.route('/')
 def index():
@@ -44,7 +43,6 @@ def profile():
                            user=user,
                            posts=posts)
 
-<<<<<<< HEAD
 @app.route('/testSERVER', methods=['POST'])
 def testSERVER():
     global key
@@ -63,38 +61,37 @@ def testSERVER():
     # print (temp.poster_url)
     titles = []
     scores = []
-    directors= []
+    # directors= []
     print (list10)
     for item in list10:
+        print("hello")
         # webbrowser.open(list10[x]["image"]["url"])
         # webbrowser.close(list10[x]["image"]["url"])
         # print (list10[x])
         imdbid = item["tconst"]
-        title = imdb.get_title_by_id(imdbid)
+        # title = imdb.get_title_by_id(imdbid)
         # print (imdbid)
         IMG_PATTERN = 'http://api.themoviedb.org/3/movie/{imdbid}/images?api_key={key}'
         # print (KEY)
         r = requests.get(IMG_PATTERN.format(key=KEY,imdbid=imdbid))
         api_response = r.json()
 
-        posters = api_response['posters']
-        print (posters)
+        rel_path = api_response['posters'][0]['file_path']
+        # print (posters)
         poster_urls= []
-        rel_path = posters[0]['file_path']
         url = "{0}{1}{2}".format(base_url, max_size, rel_path)
         poster_urls.append(url)
         newList10.append(poster_urls)
         scores.append(item["rating"])
-        directors.append(title.directors_summary[0].name)
+        # directors.append(title.directors_summary[0].name)
         titles.append(item["title"])
         # print (newList10[x])
 
-    return json.dumps({'status':'OK','list':newList10,'title':titles,'score':scores,'director':directors})
+    return json.dumps({'status':'OK','list':newList10,'title':titles,'score':scores})
 
-=======
+
 imdb = Imdb()
 imdb = Imdb(anonymize=True)
->>>>>>> c5718c1cb0cd724834cfb1407271671ce6e7b35a
 @app.route('/moviePage')
 def moviePage():
         listOfPopularMovies = imdb.top_250()
