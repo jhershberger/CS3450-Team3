@@ -2,7 +2,7 @@ from flask import render_template, flash, redirect,request
 from app import app
 from .forms import LoginForm
 from imdbpie import Imdb
-import random
+from random import randint
 import webbrowser
 import json
 import requests
@@ -49,17 +49,23 @@ def testSERVER():
     list250 = imdb.top_250()
     list10 = []
     newList10 = []
+
     for x in range(0,10):
-        list10.append(list250[x])
+        rand = randint(0,249)
+        list10.append(list250[rand])
 
     # temp = imdb.get_title_by_id(id)
     # print (temp.poster_url)
+    titles = []
+    scores = []
+    directors= []
     print (list10)
     for item in list10:
         # webbrowser.open(list10[x]["image"]["url"])
         # webbrowser.close(list10[x]["image"]["url"])
         # print (list10[x])
         imdbid = item["tconst"]
+        title = imdb.get_title_by_id(imdbid)
         # print (imdbid)
         IMG_PATTERN = 'http://api.themoviedb.org/3/movie/{imdbid}/images?api_key={key}'
         # print (KEY)
@@ -73,9 +79,12 @@ def testSERVER():
         url = "{0}{1}{2}".format(base_url, max_size, rel_path)
         poster_urls.append(url)
         newList10.append(poster_urls)
+        scores.append(item["rating"])
+        directors.append(title.directors_summary[0].name)
+        titles.append(item["title"])
         # print (newList10[x])
 
-    return json.dumps({'status':'OK','list':newList10})
+    return json.dumps({'status':'OK','list':newList10,'title':titles,'score':scores,'director':directors})
 
 @app.route('/moviePage')
 def moviePage():

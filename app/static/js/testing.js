@@ -1,11 +1,7 @@
-$(document).ready(function(){console.log("this is a test!@!@!@!")})
 
-function appendDom(response){
-	$('#main-block').append('<div><img src="' + response + '"></img><div>')
-}
+$(document).ready(function(){
 
-$(function(){
-	$('#get-movie').click(function(){
+
 		var id = $('#id-input').val()
 		console.log("id: ", id)
 		console.log("clicked!")
@@ -29,11 +25,16 @@ $(function(){
 					console.log(obj.list[i]);
 					// console.log(obj.list[i].image.url);
 					// webbrowser.open(obj.list[i].image.url);
-					appendDom(obj.list[i]);
+					appendDom(obj.list[i],obj.title[i],obj.score[i],obj.director[i]);
+
 					i++;
 				}
+				$("#loading").hide();
 				// appendDom(obj.url);
 			}
 		});
-	});
-});
+})
+
+function appendDom(response,title,score,director){
+	$('#main-block').append('<div id="new_block"><img id="poster_image" src="' + response + '"></img><h1>'+ title +'</h1>'+'<h1>'+ score +'</h1>'+'<h1>'+ director +'</h1><div>')
+}
