@@ -1,7 +1,8 @@
-from flask import render_template, flash, redirect,request
+from flask import render_template, flash, redirect
 from app import app
 from .forms import LoginForm
 from imdbpie import Imdb
+<<<<<<< HEAD
 from random import randint
 import webbrowser
 import json
@@ -17,6 +18,9 @@ r = requests.get(url)
 config = r.json()
 base_url = 'https://image.tmdb.org/t/p/'
 max_size = 'original'
+=======
+import random
+>>>>>>> c5718c1cb0cd724834cfb1407271671ce6e7b35a
 
 @app.route('/')
 def index():
@@ -40,6 +44,7 @@ def profile():
                            user=user,
                            posts=posts)
 
+<<<<<<< HEAD
 @app.route('/testSERVER', methods=['POST'])
 def testSERVER():
     global key
@@ -86,9 +91,23 @@ def testSERVER():
 
     return json.dumps({'status':'OK','list':newList10,'title':titles,'score':scores,'director':directors})
 
+=======
+imdb = Imdb()
+imdb = Imdb(anonymize=True)
+>>>>>>> c5718c1cb0cd724834cfb1407271671ce6e7b35a
 @app.route('/moviePage')
 def moviePage():
-    return render_template("moviePage.html")  # render the moviePage template
+        listOfPopularMovies = imdb.top_250()
+        temp = random.randint(1, 249)
+        t = listOfPopularMovies[temp]
+        tid = t["tconst"]
+        title = imdb.get_title_by_id(tid)
+        year = t["year"]
+        rating = t["rating"]
+        actor = str(title.cast_summary[0].name)
+        director = str(title.directors_summary[0].name)
+
+        return render_template("moviePage.html", title=t["title"], year=year, rating=rating, actor=actor, director=director)  # render the moviePage template
 
 @app.route('/BasicSearchResults')
 def BasicSearchResults():

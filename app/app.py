@@ -1,8 +1,10 @@
 # import the Flask class from the flask module
 from flask import Flask, render_template,request
-
+import app
 import json
 import requests
+from imdbpie import Imdb
+import random
 
 # load the adapter
 import psycopg2
@@ -28,6 +30,20 @@ def index():
 def nav():
     return render_template('nav.html')  # render the navbar template
 
+'''@app.route('/moviePage')
+def moviePage():
+    imdb = Imdb()
+    imdb = Imdb(anonymize=True)
+    listOfPopularMovies = imdb.top_250()
+    temp = random.randint(1, 249)
+    t = listOfPopularMovies[temp]
+    tid = t["tconst"]
+    title = t["title"]
+    year = title.year
+    rating = title.rating
+    actors = title.cast_summary()
+    return render_template("moviePage.html")  # render the moviePage template'''
+
 @app.route('/testSERVER', methods=['POST'])
 def testSERVER():
 	id = request.form['var']
@@ -40,7 +56,7 @@ def testSERVER():
 	    #cur.execute('CREATE TABLE team3.test (id serial PRIMARY KEY, num integer, data varchar);')
 	    #cur.execute("INSERT INTO test (num, data) VALUES (100, \'testing\');")
 	    #conn.commit()
-	    
+
 	except psycopg2 as e:
 	    pass
 
