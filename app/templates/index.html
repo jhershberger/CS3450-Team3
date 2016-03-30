@@ -3,25 +3,11 @@
 <script src='{{url_for("static",filename="js/jquery.js")}}'></script>
 
 <script src='{{url_for("static",filename="js/testing.js")}}'></script>
-<button id='get-movie'>Get Movie!</button>
-<input id = "id-input"></input>
+
 <div id='main-block'>
+<img id='loading' src ="static/images/loading.gif"></img>
 <div id="main-content">
-<h1><a href="profile" >So-and-so</a> liked: <a href="moviePage" >A Movie</a></h1>
-<a href="moviePage" ><img src = "http://i2.wp.com/bitcast-a-sm.bitgravity.com/slashfilm/wp/wp-content/images/jaws.jpeg" alt = "" height="10%" width = "10%"></a>
-<h1>Information about movie:</h1>
-<h2>Score: 10</h2>
-<h2>Director: _______________</h2>
-<h2>Cast: ____________________</h2>
-</div>
-<div id="main-content">
-<h1><a href="profile" >So-and-so</a> liked: <a href="moviePage" >A Different Movie</a></h1>
-<a href="moviePage" ><img src = "http://cdn.traileraddict.com/content/paramount-pictures/titanic.jpg" alt = "" height="10%" width = "10%"></a>
-<h1>Information about movie:</h1>
-<h2>Score: 10</h2>
-<h2>Director: _______________</h2>
-<h2>Cast: ____________________</h2>
-</div>
+
 </div>
 
 {% endblock %}
