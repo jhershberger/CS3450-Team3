@@ -34,5 +34,10 @@ $(document).ready(function(){
 })
 
 function appendDom(response,title,score){
-	$('#main-block').append('<div id="new_block"><a href ="/moviePage" ><img id="poster_image" src="' + response + '"></img></a><h1>'+ title +'</h1>'+'<h1>'+ score +'</h1><div>')
+	$('#main-block').append(
+		'<div class = "row new_block">'
+			+ '<div class ="col-sm-3"><a href ="/moviePage" ><img id="poster_image" src="' + response + '">'
+				+ '</img></a></div><div class="col-sm-8"><h1>'+ title +'</h1>'
+					+'<h1 id="main-score">'+ score +'</h1>'
+						+ '</div></div>')
 }

@@ -1,6 +1,6 @@
 
 
-#new_block{
+.new_block{
 	display:block;
 	margin-right: 0;
 	margin-left: 0;
@@ -11,9 +11,21 @@
 #poster_image{
 	    height: auto;
 	    width: auto;
-	    max-width: 15%;
-	    max-height: 15%;
+	    max-width: 40%;
+	    max-height: 40%;
 }
 #loading{
 	margin-left: 30%;
+}
+#main-title{
+	display: block;
+	margin-right: 25px;
+}
+#main-info{
+	display: block;
+	position: relative;
+	margin-right: 25px;
+	margin-left: 300px;
+	margin-top: 0px;
+	outline:1px solid black;
 }
