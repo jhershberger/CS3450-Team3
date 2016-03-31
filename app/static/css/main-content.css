@@ -8,11 +8,11 @@
 	background-color: white;
 	outline: 1px solid black;
 }
-#poster_image{
+.poster_image{
 	    height: auto;
 	    width: auto;
-	    max-width: 40%;
-	    max-height: 40%;
+	    max-width: 50%;
+	    max-height: 50%;
 }
 #loading{
 	margin-left: 30%;

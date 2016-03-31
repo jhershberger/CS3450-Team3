@@ -24,7 +24,33 @@ import random
 @app.route('/')
 def index():
     return render_template("index.html")  # render the index template
+@app.route('/baseUpdater', methods=['POST'])
+def baseUpdater():
+    global key
+    global title
+    # id = request.form['var']
+    list250 = imdb.top_250()
+    list10 = []
+    newList10 = []
+    besttitles = []
+    print ("We're here")
+    for x in range(0,10):
+        rand = randint(0,249)
+        list10.append(list250[rand])
+    for x in range(0,10):
+        newList10.append(list250[x])
+    titles = []
 
+    # print (list10)
+    for item in list10:
+        imdbid = item["tconst"]
+
+        titles.append(item["title"])
+    for item in newList10:
+        besttitles.append(item["title"])
+
+
+    return json.dumps({'status':'OK','title':titles,'besttitles':besttitles})
 @app.route('/profile')
 def profile():
     user = {'username': 'Mcubed'}  # fake user
@@ -46,7 +72,6 @@ def profile():
 @app.route('/testSERVER', methods=['POST'])
 def testSERVER():
     global key
-    print("hello")
     global title
     # id = request.form['var']
     list250 = imdb.top_250()
@@ -61,13 +86,10 @@ def testSERVER():
     # print (temp.poster_url)
     titles = []
     scores = []
+    ids = []
     # directors= []
     print (list10)
     for item in list10:
-        print("hello")
-        # webbrowser.open(list10[x]["image"]["url"])
-        # webbrowser.close(list10[x]["image"]["url"])
-        # print (list10[x])
         imdbid = item["tconst"]
         # title = imdb.get_title_by_id(imdbid)
         # print (imdbid)
@@ -85,9 +107,10 @@ def testSERVER():
         scores.append(item["rating"])
         # directors.append(title.directors_summary[0].name)
         titles.append(item["title"])
+        ids.append(imdbid)
         # print (newList10[x])
 
-    return json.dumps({'status':'OK','list':newList10,'title':titles,'score':scores})
+    return json.dumps({'status':'OK','list':newList10,'title':titles,'score':scores,'ids':ids})
 
 
 imdb = Imdb()
