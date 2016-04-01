@@ -129,9 +129,28 @@ def moviePage():
 
         return render_template("moviePage.html", title=t["title"], year=year, rating=rating, actor=actor, director=director)  # render the moviePage template
 
+imdb = Imdb()
+imdb = Imdb(anonymize=True)
 @app.route('/BasicSearchResults')
 def BasicSearchResults():
-    return render_template("BasicSearchResults.html")  # render the search results template
+    arrtitle = []
+    arryear = []
+    arrimg = []
+    stitles = imdb.search_for_title("The Dark Knight")
+    # print (stitles)
+    for m in range(0,10):
+        title = imdb.get_title_by_id(stitles[m]["imdb_id"])
+        # print ("this is title")
+        # print (title)
+        # arrimg.append(title.trailer_image_urls[0])
+        arrtitle.append(stitles[m]["title"])
+        arryear.append(stitles[m]["year"])
+    # arrtitle =
+    # print ("this is arrtitle")
+    # print (arrtitle)
+    # print ("this is arryear")
+    # print (arryear)
+    return render_template("BasicSearchResults.html", title=arrtitle, year=arryear)  # render the search results template
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

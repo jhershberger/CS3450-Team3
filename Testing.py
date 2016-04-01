@@ -4,9 +4,11 @@ import random
 imdb = Imdb()
 imdb = Imdb(anonymize=True)
 variable = imdb.search_for_title("The Dark Knight")[0]
+print (variable)
 # conn = psycopg2.connect()
 # cur = conn.cursor()
 title = imdb.get_title_by_id("tt0468569")
+print (title)
 print (title.title)
 print (title.rating)
 print (title.runtime)
