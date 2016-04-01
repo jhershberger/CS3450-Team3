@@ -140,9 +140,11 @@ def BasicSearchResults():
     # print (stitles)
     for m in range(0,10):
         title = imdb.get_title_by_id(stitles[m]["imdb_id"])
+        print ("image urls?")
+        print (title.trailer_image_urls)
         # print ("this is title")
         # print (title)
-        # arrimg.append(title.trailer_image_urls[0])
+        arrimg.append(title.trailer_image_urls)
         arrtitle.append(stitles[m]["title"])
         arryear.append(stitles[m]["year"])
     # arrtitle =
@@ -150,7 +152,7 @@ def BasicSearchResults():
     # print (arrtitle)
     # print ("this is arryear")
     # print (arryear)
-    return render_template("BasicSearchResults.html", title=arrtitle, year=arryear)  # render the search results template
+    return render_template("BasicSearchResults.html", title=arrtitle, year=arryear, img=arrimg)  # render the search results template
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
