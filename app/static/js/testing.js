@@ -54,29 +54,40 @@ $(document).ready(function(){
 				// appendDom(obj.url);
 			}
 		});
+	$(document).on("click", ".poster_image", function(){
+		// TODO
+		console.log("doing stuff");
+	});
+// 	$(".poster_image").click(function(){
+// 	var movieId = $('#submit').val();
+// 	console.log("We're here!");
+// 	$.ajax({
+// 		type:'POST',
+// 		url:'/moviePage',
+// 		async: true,
+// 		data: {'var': movieId},
+// 		success: function(response){
+// 			console.log("We win");
+// 			console.log(response);
+// 		}
+// 	})
+// });
 
-	$(".poster_image").click(function(){
-	var movieId = $('#submit').val();
-	console.log("We're here!");
-	$.ajax({
-		type:'POST',
-		url:'/moviePage',
-		async: true,
-		data: {'var': movieId},
-		success: function(response){
-			console.log("We win");
-			console.log(response);
-		}
-	})
 });
 
-});
-
+// function appendDom(response,title,score,id){
+// 	$('#main-block').append(
+// 		'<div class = "row new_block">'
+// 			+ '<div class ="col-sm-4"><input id="submit" type="hidden" value="'+ id + '"><a href ="/moviePage" ><img class="poster_image" src="' + response + '">'
+// 				+ '</img></a></div><div class="col-sm-8"><h1>'+ title +'</h1>'
+// 					+'<h1 id="main-score">'+ score +'</h1>'
+// 						+ '</div></div>')
+// }
 function appendDom(response,title,score,id){
 	$('#main-block').append(
 		'<div class = "row new_block">'
-			+ '<div class ="col-sm-4"><input id="submit" type="hidden" value="'+ id + '"><a href ="/moviePage" ><img class="poster_image" src="' + response + '">'
-				+ '</img></a></div><div class="col-sm-8"><h1>'+ title +'</h1>'
+			+ '<div class ="col-sm-4"><input id="submit" type="hidden" value="'+ id + '"><img class="poster_image" src="' + response + '">'
+				+ '</img></div><div class="col-sm-8"><h1>'+ title +'</h1>'
 					+'<h1 id="main-score">'+ score +'</h1>'
 						+ '</div></div>')
 }
