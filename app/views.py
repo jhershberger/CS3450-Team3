@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect
+from flask import Flask, render_template, flash, redirect, url_for, request
 from app import app
 from .forms import LoginForm
 from imdbpie import Imdb
@@ -6,6 +6,7 @@ from random import randint
 import webbrowser
 import json
 import requests
+import random
 imdb = Imdb()
 imdb = Imdb(anonymize = True)
 imdb = Imdb(cache=True)
@@ -18,12 +19,10 @@ config = r.json()
 base_url = 'https://image.tmdb.org/t/p/'
 max_size = 'original'
 
-import random
-
-
 @app.route('/')
 def index():
     return render_template("index.html")  # render the index template
+
 @app.route('/baseUpdater', methods=['POST'])
 def baseUpdater():
     global key
@@ -51,6 +50,7 @@ def baseUpdater():
 
 
     return json.dumps({'status':'OK','title':titles,'besttitles':besttitles})
+
 @app.route('/profile')
 def profile():
     user = {'username': 'Mcubed'}  # fake user
@@ -129,39 +129,16 @@ def moviePage():
 
         return render_template("moviePage.html", title=t["title"], year=year, rating=rating, actor=actor, director=director)  # render the moviePage template
 
-imdb = Imdb()
-imdb = Imdb(anonymize=True)
 @app.route('/BasicSearchResults')
 def BasicSearchResults():
-    arrtitle = []
-    arryear = []
-    arrimg = []
-    stitles = imdb.search_for_title("The Dark Knight")
-    # print (stitles)
-    for m in range(0,10):
-        title = imdb.get_title_by_id(stitles[m]["imdb_id"])
-        print ("image urls?")
-        print (title.trailer_image_urls)
-        # print ("this is title")
-        # print (title)
-        arrimg.append(title.trailer_image_urls)
-        arrtitle.append(stitles[m]["title"])
-        arryear.append(stitles[m]["year"])
-    # arrtitle =
-    # print ("this is arrtitle")
-    # print (arrtitle)
-    # print ("this is arryear")
-    # print (arryear)
-    return render_template("BasicSearchResults.html", title=arrtitle, year=arryear, img=arrimg)  # render the search results template
+    return render_template("BasicSearchResults.html")  # render the search results template
 
 @app.route('/login', methods=['GET', 'POST'])
-def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        flash('Login requested for OpenID="%s", remember_me=%s' %
-              (form.openid.data, str(form.remember_me.data)))
-        return redirect('/')
-    return render_template('login.html',
-                           title='Sign In',
-                           form=form,
-                           providers=app.config['OPENID_PROVIDERS'])
+def login():        
+    error = None
+    if request.method == 'POST':
+        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+            error = 'Invalid username or password.'
+        else:
+            return redirect('/')
+    return render_template('login.html', error=error)
