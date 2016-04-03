@@ -1,6 +1,9 @@
-from flask import Flask, render_template, flash, redirect, url_for, request
-from app import app
+import flask
+from flask import Flask, render_template, flash, redirect, url_for, request, Response
+from app import app, login_manager
 from .forms import LoginForm
+from .models import User
+from flask.ext.login import LoginManager, login_required, login_user, logout_user, current_user
 from imdbpie import Imdb
 from random import randint
 import webbrowser
@@ -52,8 +55,9 @@ def baseUpdater():
     return json.dumps({'status':'OK','title':titles,'besttitles':besttitles})
 
 @app.route('/profile')
+@login_required
 def profile():
-    user = {'username': 'Mcubed'}  # fake user
+    user = current_user.id
     posts = [  # fake array of posts
         {
             'author': {'username': 'John'},
@@ -134,11 +138,25 @@ def BasicSearchResults():
     return render_template("BasicSearchResults.html")  # render the search results template
 
 @app.route('/login', methods=['GET', 'POST'])
-def login():        
+def login():
     error = None
     if request.method == 'POST':
         if request.form['username'] != 'admin' or request.form['password'] != 'admin':
-            error = 'Invalid username or password.'
+            error = 'Invalid Credentials. Please try again.'
         else:
-            return redirect('/')
+            login_user(User(str(request.form['username']),str(request.form['password'])))
+            return redirect(url_for('profile'))
     return render_template('login.html', error=error)
+
+@login_manager.user_loader
+def load_user(user_id):
+    user = User('admin','admin')
+    #get id from database
+    #create instance of user of that id
+    return user
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect('/')
