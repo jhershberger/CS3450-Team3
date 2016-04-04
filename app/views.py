@@ -146,9 +146,10 @@ def moviePage():
 
         genre = title.genres[0]
         runtime = int(title.runtime/60)
+        plot = title.plot_outline
         director = str(title.directors_summary[0].name)
 
-        return render_template("moviePage.html", title=t["title"], year=year, rating=rating,runtime=runtime, director=director, img=url, actor=names, genre=genre)  # render the moviePage template
+        return render_template("moviePage.html", title=t["title"], year=year, plot=plot, rating=rating,runtime=runtime, director=director, img=url, actor=names, genre=genre)  # render the moviePage template
 
 @app.route('/BasicSearchResults')
 def BasicSearchResults():
