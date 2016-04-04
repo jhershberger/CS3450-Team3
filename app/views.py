@@ -121,17 +121,34 @@ imdb = Imdb()
 imdb = Imdb(anonymize=True)
 @app.route('/moviePage')
 def moviePage():
+        global key
         listOfPopularMovies = imdb.top_250()
         temp = random.randint(1, 249)
         t = listOfPopularMovies[temp]
-        tid = t["tconst"]
-        title = imdb.get_title_by_id(tid)
+        imdbid = t["tconst"]
+        title = imdb.get_title_by_id(imdbid)
+
+        #image stuff
+        IMG_PATTERN = 'http://api.themoviedb.org/3/movie/{imdbid}/images?api_key={key}'
+        # print (KEY)
+        r = requests.get(IMG_PATTERN.format(key=KEY,imdbid=imdbid))
+        api_response = r.json()
+
+        rel_path = api_response['posters'][0]['file_path']
+        url = "{0}{1}{2}".format(base_url, max_size, rel_path)
+
         year = t["year"]
         rating = t["rating"]
-        actor = str(title.cast_summary[0].name)
+        actors = title.cast_summary
+        names = ""
+        for x in range(0, len(actors)):
+            names += str(actors[x].name) + ", "
+
+        genre = title.genres[0]
+        runtime = int(title.runtime/60)
         director = str(title.directors_summary[0].name)
 
-        return render_template("moviePage.html", title=t["title"], year=year, rating=rating, actor=actor, director=director)  # render the moviePage template
+        return render_template("moviePage.html", title=t["title"], year=year, rating=rating,runtime=runtime, director=director, img=url, actor=names, genre=genre)  # render the moviePage template
 
 @app.route('/BasicSearchResults')
 def BasicSearchResults():
