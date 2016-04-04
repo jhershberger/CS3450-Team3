@@ -21,6 +21,7 @@ r = requests.get(url)
 config = r.json()
 base_url = 'https://image.tmdb.org/t/p/'
 max_size = 'original'
+login_manager.login_view = "login"
 
 @app.route('/')
 def index():
@@ -153,7 +154,19 @@ def moviePage():
 
 @app.route('/BasicSearchResults')
 def BasicSearchResults():
-    return render_template("BasicSearchResults.html")  # render the search results template
+    title = []
+    year = []
+    img = []
+    sterm = imdb.search_for_title("The Dark Knight")
+    print (sterm)
+    for m in range (0,10):
+        # imgtitle = imdb.get_title_by_id(sterm[m]["imdb_id"])
+        # img.append(imgtitle.trailer_image_urls[0])
+        # img.append(imgtitle.image["url"])
+        # print (imdb.get_title_images(sterm[m]["imdb_id"]))
+        title.append(sterm[m]["title"])
+        year.append(sterm[m]["year"])
+    return render_template("BasicSearchResults.html", img=img, title=title, year=year)  # render the search results template
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
