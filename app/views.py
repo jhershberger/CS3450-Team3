@@ -179,6 +179,11 @@ def login():
             return redirect(url_for('profile'))
     return render_template('login.html', error=error)
 
+@app.route('/create')
+def creation():
+    return render_template('profCreation.html')
+
+
 @login_manager.user_loader
 def load_user(user_id):
     user = User('admin','admin')
