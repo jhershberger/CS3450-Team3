@@ -29,3 +29,20 @@
 	margin-top: 0px;
 	outline:1px solid black;
 }
+
+#creation{
+	display: block;
+	position: relative;
+	margin-right: 25px;
+	margin-left: 300px;
+	margin-top: 35px;
+
+}
+
+#welcome{
+	display: block;
+	position: relative;
+	margin-right: 25px;
+	margin-left: 200px;
+	margin-top: 35px;
+}
