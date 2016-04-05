@@ -74,6 +74,7 @@ def profile():
                            user=user,
                            posts=posts)
 
+
 @app.route('/testSERVER', methods=['POST'])
 def testSERVER():
     global key
@@ -117,6 +118,37 @@ def testSERVER():
 
     return json.dumps({'status':'OK','list':newList10,'title':titles,'score':scores,'ids':ids})
 
+
+@app.route('/movieUpdate',methods=['POST'])
+def movieUpdate():
+    global key
+
+    imdbid = request.form['var']
+    title = imdb.get_title_by_id(imdbid)
+
+    #image stuff
+    IMG_PATTERN = 'http://api.themoviedb.org/3/movie/{imdbid}/images?api_key={key}'
+    # print (KEY)
+    r = requests.get(IMG_PATTERN.format(key=KEY,imdbid=imdbid))
+    api_response = r.json()
+
+    rel_path = api_response['posters'][0]['file_path']
+    url = "{0}{1}{2}".format(base_url, max_size, rel_path)
+
+    year = title.year
+    rating = title.rating
+    actors = title.cast_summary
+    names = ""
+    for x in range(0, len(actors)):
+        names += str(actors[x].name) + ", "
+
+    genre = title.genres[0]
+    runtime = int(title.runtime/60)
+    plot = title.plot_outline
+    director = str(title.directors_summary[0].name)
+    print ("Almost")
+
+    return render_template("moviePage.html", title=title.title, year=year, plot=plot, rating=rating,runtime=runtime, director=director, img=url, actor=names, genre=genre)
 
 imdb = Imdb()
 imdb = Imdb(anonymize=True)

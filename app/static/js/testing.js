@@ -57,21 +57,19 @@ $(document).ready(function(){
 	$(document).on("click", ".poster_image", function(){
 		// TODO
 		console.log("doing stuff");
+		var movieId = $('#submit').val();
+		console.log("We're here!");
+		$.ajax({
+			type:'POST',
+			url:'/movieUpdate',
+			async: true,
+			data: {'var': movieId},
+			success: function(response){
+				console.log("We win");
+				console.log(response);
+			}
+		})
 	});
-// 	$(".poster_image").click(function(){
-// 	var movieId = $('#submit').val();
-// 	console.log("We're here!");
-// 	$.ajax({
-// 		type:'POST',
-// 		url:'/moviePage',
-// 		async: true,
-// 		data: {'var': movieId},
-// 		success: function(response){
-// 			console.log("We win");
-// 			console.log(response);
-// 		}
-// 	})
-// });
 
 });
 
