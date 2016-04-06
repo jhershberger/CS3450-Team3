@@ -184,29 +184,36 @@ def moviePage():
 
         return render_template("moviePage.html", title=t["title"], year=year, plot=plot, rating=rating,runtime=runtime, director=director, img=url, actor=names, genre=genre)  # render the moviePage template
 
-@app.route('/BasicSearchResults')
+@app.route('/BasicSearchResults',methods=['POST'])
 def BasicSearchResults():
     global key
     titles = []
     year = []
     img = []
-    sterm = imdb.search_for_title("The Dark Knight")
-    print (sterm)
+    searchterm = request.form['id']
+    # print(imdbid)
+    # title = imdb.get_title_by_id(imdbid)
+    # print (title)
+    sterms = imdb.search_for_title(searchterm)
+    print (sterms)
 
-    imdbid = 'tt0468569'
-    # imdbid = request.form['var']
-    title = imdb.get_title_by_id(imdbid)
+
 
     for m in range (0,10):
         #image stuff
         IMG_PATTERN = 'http://api.themoviedb.org/3/movie/{imdbid}/images?api_key={key}'
         # print (KEY)
         print(m)
-        r = requests.get(IMG_PATTERN.format(key=KEY,imdbid=sterm[m]["imdb_id"]))
+        r = requests.get(IMG_PATTERN.format(key=KEY,imdbid=sterms[m]["imdb_id"]))
         api_response = r.json()
-        print (api_response)
+
+        keys = api_response.keys()
+        print (keys)
         # We have to handle errors for posters that we don't have#
         if 'status_code' in api_response.keys():
+            url = 'https://valleytechnologies.net/wp-content/uploads/2015/07/error.png'
+            img.append(url)
+        elif 'id' not in api_response.keys():
             url = 'https://valleytechnologies.net/wp-content/uploads/2015/07/error.png'
             img.append(url)
         else:
@@ -216,8 +223,8 @@ def BasicSearchResults():
         # img.append(imgtitle.trailer_image_urls[0])
         # img.append(imgtitle.image["url"])
         # print (imdb.get_title_images(sterm[m]["imdb_id"]))
-        titles.append(sterm[m]["title"])
-        year.append(sterm[m]["year"])
+        titles.append(sterms[m]["title"])
+        year.append(sterms[m]["year"])
     return render_template("BasicSearchResults.html", img=img, title=titles, year=year)  # render the search results template
 
 @app.route('/login', methods=['GET', 'POST'])

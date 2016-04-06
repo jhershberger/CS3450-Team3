@@ -3,7 +3,10 @@
 <script src='{{url_for("static",filename="js/jquery.js")}}'></script>
 
 <script src='{{url_for("static",filename="js/testing.js")}}'></script>
-
+<form action='/BasicSearchResults' method = "post" >
+Search for a movie!  <input type = "text" name="id">
+<input type="submit" value = "Search">
+</form>
 <div id='main-block'>
 <img id='loading' src ="static/images/loading.gif"></img>
 <div id="main-content">
