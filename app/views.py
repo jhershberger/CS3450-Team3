@@ -107,7 +107,7 @@ def testSERVER():
     scores = []
     ids = []
     # directors= []
-    print (list10)
+    # print (list10)
     for item in list10:
         imdbid = item["tconst"]
         # title = imdb.get_title_by_id(imdbid)
@@ -221,7 +221,7 @@ def BasicSearchResults():
 
         keys = api_response.keys()
         # print (keys)
-        # We have to handle errors for posters that we don't have#
+        # We have to handle errors for posters that we don't have
         if 'status_code' in api_response.keys():
             url = 'https://valleytechnologies.net/wp-content/uploads/2015/07/error.png'
             img.append(url)
