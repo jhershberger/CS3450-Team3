@@ -54,22 +54,22 @@ $(document).ready(function(){
 				// appendDom(obj.url);
 			}
 		});
-	$(document).on("click", ".poster_image", function(){
-		// TODO
-		console.log("doing stuff");
-		var movieId = $('#submit').val();
-		console.log("We're here!");
-		$.ajax({
-			type:'POST',
-			url:'/movieUpdate',
-			async: true,
-			data: {'var': movieId},
-			success: function(response){
-				console.log("We win");
-				console.log(response);
-			}
-		})
-	});
+	// $(document).on("click", ".poster_image", function(){
+	// 	// TODO
+	// 	console.log("doing stuff");
+	// 	var movieId = $('#submit').val();
+	// 	console.log("We're here!");
+	// 	$.ajax({
+	// 		type:'POST',
+	// 		url:'/movieUpdate',
+	// 		async: true,
+	// 		data: {'var': movieId},
+	// 		success: function(response){
+	// 			console.log("We win");
+	// 			console.log(response);
+	// 		}
+	// 	})
+	// });
 
 });
 
@@ -84,7 +84,7 @@ $(document).ready(function(){
 function appendDom(response,title,score,id){
 	$('#main-block').append(
 		'<div class = "row new_block">'
-			+ '<div class ="col-sm-4"><input id="submit" type="hidden" value="'+ id + '"><img class="poster_image" src="' + response + '">'
+			+ '<div class ="col-sm-4"><form action = "/movieUpdate" method="post"><input type = "hidden" id= "thisOne" name= "really" value="'+id+'"><input class="poster_image" type ="image" src="' + response + '"></form>'
 				+ '</img></div><div class="col-sm-8"><h1>'+ title +'</h1>'
 					+'<h1 id="main-score">'+ score +'</h1>'
 						+ '</div></div>')

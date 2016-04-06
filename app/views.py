@@ -119,11 +119,11 @@ def testSERVER():
     return json.dumps({'status':'OK','list':newList10,'title':titles,'score':scores,'ids':ids})
 
 
-@app.route('/movieUpdate',methods=['POST'])
+@app.route('/movieUpdate',methods=['POST','GET'])
 def movieUpdate():
     global key
 
-    imdbid = request.form['var']
+    imdbid = request.form['really']
     title = imdb.get_title_by_id(imdbid)
 
     #image stuff
