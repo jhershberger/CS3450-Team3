@@ -146,7 +146,6 @@ def movieUpdate():
     runtime = int(title.runtime/60)
     plot = title.plot_outline
     director = str(title.directors_summary[0].name)
-    print ("Almost")
 
     return render_template("moviePage.html", title=title.title, year=year, plot=plot, rating=rating,runtime=runtime, director=director, img=url, actor=names, genre=genre)
 
@@ -195,7 +194,7 @@ def BasicSearchResults():
     # title = imdb.get_title_by_id(imdbid)
     # print (title)
     sterms = imdb.search_for_title(searchterm)
-    print (sterms)
+    # print (sterms)
 
 
 
@@ -203,17 +202,17 @@ def BasicSearchResults():
         #image stuff
         IMG_PATTERN = 'http://api.themoviedb.org/3/movie/{imdbid}/images?api_key={key}'
         # print (KEY)
-        print(m)
+        # print(m)
         r = requests.get(IMG_PATTERN.format(key=KEY,imdbid=sterms[m]["imdb_id"]))
         api_response = r.json()
 
         keys = api_response.keys()
-        print (keys)
+        # print (keys)
         # We have to handle errors for posters that we don't have
         if 'status_code' in api_response.keys():
             url = 'https://valleytechnologies.net/wp-content/uploads/2015/07/error.png'
             img.append(url)
-        elif 'id' not in api_response.keys():
+        elif not api_response['posters']:
             url = 'https://valleytechnologies.net/wp-content/uploads/2015/07/error.png'
             img.append(url)
         else:
