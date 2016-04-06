@@ -40,8 +40,7 @@
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container nav-container">
             <!-- Brand and toggle get grouped for better mobile display -->
-            <a href="login">Login</a>
-            <a href="create">Sign-Up</a>
+
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span>
@@ -60,6 +59,25 @@
                     <li>
                         <a href="#">&nbsp;<!-- Website Title --></a>
                     </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                      <form action='/BasicSearchResults' method = "post" >
+                      Search for a movie!  <input type = "text" name="id">
+                      <input type="submit" value = "Search">
+                      </form>
+                    </li>
+
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+
+                  <li>
+                    <a href="create">Sign-Up</a>
+                  </li>
+                  <li>
+                    <a href="login">Login</a>
+                  </li>
+
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
