@@ -212,6 +212,7 @@ def BasicSearchResults():
     titles = []
     year = []
     img = []
+    ids = []
     searchterm = request.form['id']
     # print(imdbid)
     # title = imdb.get_title_by_id(imdbid)
@@ -242,12 +243,13 @@ def BasicSearchResults():
             rel_path = api_response['posters'][0]['file_path']
             url = "{0}{1}{2}".format(base_url, max_size, rel_path)
             img.append(url)
+            ids.append(sterms[m]["imdb_id"])
         # img.append(imgtitle.trailer_image_urls[0])
         # img.append(imgtitle.image["url"])
         # print (imdb.get_title_images(sterm[m]["imdb_id"]))
         titles.append(sterms[m]["title"])
         year.append(sterms[m]["year"])
-    return render_template("BasicSearchResults.html", img=img, title=titles, year=year)  # render the search results template
+    return render_template("BasicSearchResults.html", img=img, title=titles, year=year,ids=ids)  # render the search results template
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
