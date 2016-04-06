@@ -10,6 +10,15 @@ import webbrowser
 import json
 import requests
 import random
+
+# load the adapter
+import psycopg2
+
+# load the psycopg extras module
+import psycopg2.extras
+
+from .methods import methods as _m
+
 imdb = Imdb()
 imdb = Imdb(anonymize = True)
 imdb = Imdb(cache=True)
@@ -58,7 +67,18 @@ def baseUpdater():
 @app.route('/profile')
 @login_required
 def profile():
-    user = current_user.id
+    # try:
+    #     conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
+    #     print("Successful connection to the database!")
+    # except:
+    #     print("I am unable to connect to the database")
+
+    # cur = conn.cursor()
+    # user = current_user.first_name
+    user = str(User.instances[0].first_name) + " " + str(User.instances[0].last_name)
+    email = str(User.instances[0].email)
+    username = str(User.instances[0].username)
+    friendCount = _m.queryFriendCount(User.instances[0].id)
     posts = [  # fake array of posts
         {
             'author': {'username': 'John'},
@@ -72,6 +92,9 @@ def profile():
     return render_template("profile.html",
                            title='Profile',
                            user=user,
+                           email=email,
+                           username=username,
+                           friendCount=friendCount,
                            posts=posts)
 
 
@@ -94,7 +117,7 @@ def testSERVER():
     scores = []
     ids = []
     # directors= []
-    print (list10)
+    # print (list10)
     for item in list10:
         imdbid = item["tconst"]
         # title = imdb.get_title_by_id(imdbid)
@@ -208,7 +231,7 @@ def BasicSearchResults():
 
         keys = api_response.keys()
         # print (keys)
-        # We have to handle errors for posters that we don't have#
+        # We have to handle errors for posters that we don't have
         if 'status_code' in api_response.keys():
             url = 'https://valleytechnologies.net/wp-content/uploads/2015/07/error.png'
             img.append(url)
@@ -230,27 +253,178 @@ def BasicSearchResults():
 def login():
     error = None
     if request.method == 'POST':
-        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+        # if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+        #     error = 'Invalid Credentials. Please try again.'
+        try:
+            conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
+            print("Successful connection to the database!")
+        except:
+            print("I am unable to connect to the database")
+        cur = conn.cursor()
+        try:
+            cur.execute('\
+                SELECT\
+                    user_id,\
+                    first_name,\
+                    last_name,\
+                    email,\
+                    pass,\
+                    username\
+                FROM team3.user\
+                WHERE\
+                    (email = %s OR username = %s)\
+                    AND pass = %s\
+                ', (str(request.form['username']), str(request.form['username']), str(request.form['password'])))
+        except psycopg2 as e:
+            pass
+
+        query_result = cur.fetchall()
+        if (len(query_result) <= 0):
             error = 'Invalid Credentials. Please try again.'
         else:
-            login_user(User(str(request.form['username']),str(request.form['password'])))
+            # login_user(User('user\'s id','firstname','lastname','email','password', 'username'))
+            login_user(User(query_result[0][0],query_result[0][1],query_result[0][2],query_result[0][3],query_result[0][4],query_result[0][5]))
             return redirect(url_for('profile'))
     return render_template('login.html', error=error)
 
-@app.route('/create')
+@app.route('/create', methods=['GET', 'POST'])
 def creation():
-    return render_template('profCreation.html')
+    error1 = None
+    error2 = None
+    error3 = None
+    if (request.method == 'POST'):
+        try:
+            conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
+            print("Successful connection to the database!")
+        except:
+            print("I am unable to connect to the database")
+        cur = conn.cursor()
+
+        #Check to see if the user entered already exists
+        valid_user = False
+        valid_email = False
+
+        cur.execute('SELECT * FROM team3.user WHERE username = %s', (request.form['username'],))
+        if (len(cur.fetchall()) <= 0):
+            valid_user = True
+
+        cur = conn.cursor()
+
+        cur.execute('SELECT * FROM team3.user WHERE email = %s', (request.form['email'],))
+        if (len(cur.fetchall()) <= 0):
+            valid_email = True
+
+        if (not valid_user or not valid_email):
+            error1 = "The following are/is invalid:"
+
+        if (not valid_user):
+            error2 = "Username is already taken"
+        else:
+            error2 = ""
+
+        if (not valid_email):
+            error3 = "Email is already taken"
+        else:
+            error3 = ""
+
+        #   Both the user and the email are valid!
+        if (valid_user and valid_email):
+
+            #Insert into user
+            cur = conn.cursor()
+            try:
+                cur.execute('\
+                    INSERT INTO team3.user (first_name, last_name, email, pass, username) VALUES (\
+                        %s,%s,%s,%s,%s)'
+                        ,(
+                        request.form['first_name'],
+                        request.form['last_name'],
+                        request.form['email'],
+                        request.form['pass'],
+                        request.form['username']
+                        ))
+                conn.commit()
+            except psycopg2 as e:
+                pass
+
+            #Select the the user_id, which is needed to insert into friends, and posts
+            cur = conn.cursor()
+            try:
+                cur.execute('\
+                        SELECT\
+                            user_id\
+                        FROM team3.user\
+                        WHERE\
+                            username = %s\
+                            OR email = %s\
+                    ', (str(request.form['username']),str(request.form['email'])))
+            except psycopg2 as e:
+                pass
+
+            results = cur.fetchall()
+            referenceID = results[0][0]
+
+            #Insert into friends
+            cur = conn.cursor()
+            try:
+                cur.execute("\
+                    INSERT INTO team3.friends (user_id, friend_id)\
+                    VALUES (%s, '{}')\
+                    ", (int(referenceID),))
+                conn.commit()
+            except psycopg2 as e:
+                pass
+
+            #Insert into posts
+            #TODO
+
+            #Now log that user in
+            cur = conn.cursor()
+            try:
+                cur.execute('\
+                    SELECT\
+                        user_id,\
+                        first_name,\
+                        last_name,\
+                        email,\
+                        pass,\
+                        username\
+                    FROM team3.user\
+                    WHERE\
+                        (email = %s AND username = %s)\
+                        AND pass = %s\
+                    ', (str(request.form['email']), str(request.form['username']), str(request.form['pass'])))
+            except psycopg2 as e:
+                pass
+
+            query_result = cur.fetchall()
+            # if (len(query_result) <= 0):
+            #     error = 'Invalid Credentials. Please try again.'
+            # else:
+            #     # login_user(User('user\'s id','firstname','lastname','email','password', 'username'))
+            login_user(User(query_result[0][0],query_result[0][1],query_result[0][2],query_result[0][3],query_result[0][4],query_result[0][5]))
+            return redirect(url_for('profile'))
 
 
+
+    return render_template('profCreation.html', error1=error1, error2=error2, error3=error3)
+
+#user_id is the unicode value of the user's id
 @login_manager.user_loader
 def load_user(user_id):
-    user = User('admin','admin')
-    #get id from database
     #create instance of user of that id
-    return user
+    for x in range(0, len(User.instances)):
+        if (str(User.instances[x].id) == str(user_id)):
+            load_u = User.instances[x]
+
+
+    # load_user = User.instances[0]
+    if ('load_u' in locals()):
+        return load_u
 
 @app.route("/logout")
 @login_required
 def logout():
+    User.instances = []
     logout_user()
     return redirect('/')

@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
 
+<form action='/BasicSearchResults' method = "post" >
+Search for a movie!  <input type = "text" name="id">
+<input type="submit" value = "Search">
+</form>
+
   <div id="movie-content">
       <h2>Title: {{title}}</h2>
       <img class= "poster_image" src = {{img}}>
@@ -21,7 +26,7 @@
 
 
 
-          
+
       </P>
 	</div>
 
