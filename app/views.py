@@ -391,9 +391,9 @@ def creation():
                         username\
                     FROM team3.user\
                     WHERE\
-                        (email = %s OR username = %s)\
+                        (email = %s AND username = %s)\
                         AND pass = %s\
-                    ', (str(request.form['username']), str(request.form['username']), str(request.form['pass'])))
+                    ', (str(request.form['email']), str(request.form['username']), str(request.form['pass'])))
             except psycopg2 as e:
                 pass
 
@@ -425,5 +425,6 @@ def load_user(user_id):
 @app.route("/logout")
 @login_required
 def logout():
+    User.instances = []
     logout_user()
     return redirect('/')
