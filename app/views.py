@@ -10,6 +10,14 @@ import webbrowser
 import json
 import requests
 import random
+import unicodedata
+
+# load the adapter
+import psycopg2
+
+# load the psycopg extras module
+import psycopg2.extras
+
 imdb = Imdb()
 imdb = Imdb(anonymize = True)
 imdb = Imdb(cache=True)
@@ -58,7 +66,10 @@ def baseUpdater():
 @app.route('/profile')
 @login_required
 def profile():
-    user = current_user.id
+    # user = current_user.first_name
+    user = str(User.instances[0].first_name) + " " + str(User.instances[0].last_name)
+    email = str(User.instances[0].email)
+    username = str(User.instances[0].username)
     posts = [  # fake array of posts
         {
             'author': {'username': 'John'},
@@ -72,6 +83,8 @@ def profile():
     return render_template("profile.html",
                            title='Profile',
                            user=user,
+                           email=email,
+                           username=username,
                            posts=posts)
 
 
@@ -230,10 +243,37 @@ def BasicSearchResults():
 def login():
     error = None
     if request.method == 'POST':
-        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+        # if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+        #     error = 'Invalid Credentials. Please try again.'
+        try:
+            conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
+            print("Successful connection to the database!")
+        except:
+            print("I am unable to connect to the database")
+        cur = conn.cursor()
+        try:
+            cur.execute('\
+                SELECT\
+                    user_id,\
+                    first_name,\
+                    last_name,\
+                    email,\
+                    pass,\
+                    username\
+                FROM team3.user\
+                WHERE\
+                    (email = %s OR username = %s)\
+                    AND pass = %s\
+                ', (str(request.form['username']), str(request.form['username']), str(request.form['password'])))
+        except psycopg2 as e:
+            pass
+
+        query_result = cur.fetchall()
+        if (len(query_result) <= 0):
             error = 'Invalid Credentials. Please try again.'
         else:
-            login_user(User(str(request.form['username']),str(request.form['password'])))
+            # login_user(User('user\'s id','firstname','lastname','email','password', 'username'))
+            login_user(User(query_result[0][0],query_result[0][1],query_result[0][2],query_result[0][3],query_result[0][4],query_result[0][5]))
             return redirect(url_for('profile'))
     return render_template('login.html', error=error)
 
@@ -241,13 +281,18 @@ def login():
 def creation():
     return render_template('profCreation.html')
 
-
+#user_id is the unicode value of the user's id
 @login_manager.user_loader
 def load_user(user_id):
-    user = User('admin','admin')
-    #get id from database
     #create instance of user of that id
-    return user
+    for x in range(0, len(User.instances)):
+        if (str(User.instances[x].id) == str(user_id)):
+            load_u = User.instances[x]
+
+
+    # load_user = User.instances[0]
+    if ('load_u' in locals()):
+        return load_u
 
 @app.route("/logout")
 @login_required

@@ -1,12 +1,19 @@
 from flask.ext.login import UserMixin
 
 class User():
+    instances = []
 
-    def __init__(self, username, password):
-        self.id = username
+    def __init__(self, user_id, first_name, last_name, email, password, username):
+        self.id = user_id
+        self.first_name = first_name
+        self.last_name = last_name
+        self.email = email
         self.password = password
+        self.username = username
+        
+        User.instances.append(self)
 
-    def get_username():
+    def get_username(self):
         return self.id
 
     def is_authenticated():
