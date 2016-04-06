@@ -186,19 +186,39 @@ def moviePage():
 
 @app.route('/BasicSearchResults')
 def BasicSearchResults():
-    title = []
+    global key
+    titles = []
     year = []
     img = []
     sterm = imdb.search_for_title("The Dark Knight")
     print (sterm)
+
+    imdbid = 'tt0468569'
+    # imdbid = request.form['var']
+    title = imdb.get_title_by_id(imdbid)
+
     for m in range (0,10):
-        # imgtitle = imdb.get_title_by_id(sterm[m]["imdb_id"])
+        #image stuff
+        IMG_PATTERN = 'http://api.themoviedb.org/3/movie/{imdbid}/images?api_key={key}'
+        # print (KEY)
+        print(m)
+        r = requests.get(IMG_PATTERN.format(key=KEY,imdbid=sterm[m]["imdb_id"]))
+        api_response = r.json()
+        print (api_response)
+        # We have to handle errors for posters that we don't have#
+        if 'status_code' in api_response.keys():
+            url = 'https://valleytechnologies.net/wp-content/uploads/2015/07/error.png'
+            img.append(url)
+        else:
+            rel_path = api_response['posters'][0]['file_path']
+            url = "{0}{1}{2}".format(base_url, max_size, rel_path)
+            img.append(url)
         # img.append(imgtitle.trailer_image_urls[0])
         # img.append(imgtitle.image["url"])
         # print (imdb.get_title_images(sterm[m]["imdb_id"]))
-        title.append(sterm[m]["title"])
+        titles.append(sterm[m]["title"])
         year.append(sterm[m]["year"])
-    return render_template("BasicSearchResults.html", img=img, title=title, year=year)  # render the search results template
+    return render_template("BasicSearchResults.html", img=img, title=titles, year=year)  # render the search results template
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
