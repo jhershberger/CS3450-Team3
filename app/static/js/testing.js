@@ -35,7 +35,7 @@ $(document).ready(function(){
 			success: function(response) {
 				var obj = JSON.parse(response);
 				var i=0;
-				if($('.new_block').length==0){
+
 				while(i<10){
 					// console.log(i)
 					// console.log(obj.list[i]);
@@ -44,7 +44,7 @@ $(document).ready(function(){
 
 					i++;
 				}
-			}
+		
 
 				$("#loading").hide();
 			}
