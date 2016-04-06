@@ -9,16 +9,26 @@ Search for a movie!  <input type = "text" name="id">
     <!-- <div style="align-self: center;"> -->
     <table style="width:85%; text-align: left; border-spacing: 5px; margin-left: 0%; margin-top: 0%;" border="1">
       <tbody>
-      <tr> <td> <a href="moviePage" ><img class = "poster_image_search" src={{img[0]}} /></a> </td> <td> <a href="moviePage" >{{title[0]}}</a> ({{year[0]}}) </td> </tr>
-      <tr> <td> <a href="moviePage" ><img class = "poster_image_search" src={{img[1]}} /></a> </td> <td> <a href="moviePage" >{{title[1]}}</a> ({{year[1]}}) </td> </tr>
-      <tr> <td> <a href="moviePage" ><img class = "poster_image_search" src={{img[2]}} /></a> </td> <td> <a href="moviePage" >{{title[2]}}</a> ({{year[2]}}) </td> </tr>
-      <tr> <td> <a href="moviePage" ><img class = "poster_image_search" src={{img[3]}} /></a> </td> <td> <a href="moviePage" >{{title[3]}}</a> ({{year[3]}}) </td> </tr>
-      <tr> <td> <a href="moviePage" ><img class = "poster_image_search" src={{img[4]}} /></a> </td> <td> <a href="moviePage" >{{title[4]}}</a> ({{year[4]}}) </td> </tr>
-      <tr> <td> <a href="moviePage" ><img class = "poster_image_search" src={{img[5]}} /></a> </td> <td> <a href="moviePage" >{{title[5]}}</a> ({{year[5]}}) </td> </tr>
-      <tr> <td> <a href="moviePage" ><img class = "poster_image_search" src={{img[6]}} /></a> </td> <td> <a href="moviePage" >{{title[6]}}</a> ({{year[6]}}) </td> </tr>
-      <tr> <td> <a href="moviePage" ><img class = "poster_image_search" src={{img[7]}} /></a> </td> <td> <a href="moviePage" >{{title[7]}}</a> ({{year[7]}}) </td> </tr>
-      <tr> <td> <a href="moviePage" ><img class = "poster_image_search" src={{img[8]}} /></a> </td> <td> <a href="moviePage" >{{title[8]}}</a> ({{year[8]}}) </td> </tr>
-      <tr> <td> <a href="moviePage" ><img class = "poster_image_search" src={{img[9]}} /></a> </td> <td> <a href="moviePage" >{{title[9]}}</a> ({{year[9]}}) </td> </tr>
+      <tr> <td> <form id= "form1" action = "/movieUpdate" method="post"><input type = "hidden" id= "thisOne" name= "really" value="{{ids[0]}}"><input class="poster_image_search" type ="image" src="{{img[0]}}"></form></td> <td>
+        <form action = "/movieUpdate" method= "post"><a href="javascript:{}" onclick= "document.getElementById('form1').submit();">{{title[0]}}</a><input type = "hidden" id="thisOne" name = "really" value="{{ids[0]}}"></form>({{year[0]}})</td></tr>
+      <tr> <td> <form id= "form2" action = "/movieUpdate" method="post"><input type = "hidden" id= "thisOne" name= "really" value="{{ids[1]}}"><input class="poster_image_search" type ="image" src="{{img[1]}}"></form></td> <td>
+        <form action = "/movieUpdate" method= "post"><a href="javascript:{}" onclick= "document.getElementById('form2').submit();">{{title[1]}}</a><input type = "hidden" id="thisOne" name = "really" value="{{ids[1]}}"></form>({{year[1]}})</td></tr>
+      <tr> <td> <form id= "form3" action = "/movieUpdate" method="post"><input type = "hidden" id= "thisOne" name= "really" value="{{ids[2]}}"><input class="poster_image_search" type ="image" src="{{img[2]}}"></form></td> <td>
+        <form action = "/movieUpdate" method= "post"><a href="javascript:{}" onclick= "document.getElementById('form3').submit();">{{title[2]}}</a><input type = "hidden" id="thisOne" name = "really" value="{{ids[2]}}"></form>({{year[2]}})</td></tr>
+      <tr> <td> <form id= "form4" action = "/movieUpdate" method="post"><input type = "hidden" id= "thisOne" name= "really" value="{{ids[3]}}"><input class="poster_image_search" type ="image" src="{{img[3]}}"></form></td> <td>
+        <form action = "/movieUpdate" method= "post"><a href="javascript:{}" onclick= "document.getElementById('form4').submit();">{{title[3]}}</a><input type = "hidden" id="thisOne" name = "really" value="{{ids[3]}}"></form>({{year[3]}})</td></tr>
+      <tr> <td> <form id= "form5" action = "/movieUpdate" method="post"><input type = "hidden" id= "thisOne" name= "really" value="{{ids[4]}}"><input class="poster_image_search" type ="image" src="{{img[4]}}"></form></td> <td>
+        <form action = "/movieUpdate" method= "post"><a href="javascript:{}" onclick= "document.getElementById('form5').submit();">{{title[4]}}</a><input type = "hidden" id="thisOne" name = "really" value="{{ids[4]}}"></form>({{year[4]}})</td></tr>
+      <tr> <td> <form id= "form6" action = "/movieUpdate" method="post"><input type = "hidden" id= "thisOne" name= "really" value="{{ids[5]}}"><input class="poster_image_search" type ="image" src="{{img[5]}}"></form></td> <td>
+        <form action = "/movieUpdate" method= "post"><a href="javascript:{}" onclick= "document.getElementById('form6').submit();">{{title[5]}}</a><input type = "hidden" id="thisOne" name = "really" value="{{ids[5]}}"></form>({{year[5]}})</td></tr>
+      <tr> <td> <form id= "form7" action = "/movieUpdate" method="post"><input type = "hidden" id= "thisOne" name= "really" value="{{ids[6]}}"><input class="poster_image_search" type ="image" src="{{img[6]}}"></form></td> <td>
+        <form action = "/movieUpdate" method= "post"><a href="javascript:{}" onclick= "document.getElementById('form7').submit();">{{title[6]}}</a><input type = "hidden" id="thisOne" name = "really" value="{{ids[6]}}"></form>({{year[6]}})</td></tr>
+      <tr> <td> <form id= "form8" action = "/movieUpdate" method="post"><input type = "hidden" id= "thisOne" name= "really" value="{{ids[7]}}"><input class="poster_image_search" type ="image" src="{{img[7]}}"></form></td> <td>
+        <form action = "/movieUpdate" method= "post"><a href="javascript:{}" onclick= "document.getElementById('form8').submit();">{{title[7]}}</a><input type = "hidden" id="thisOne" name = "really" value="{{ids[7]}}"></form>({{year[2]}})</td></tr>
+      <tr> <td> <form id= "form9" action = "/movieUpdate" method="post"><input type = "hidden" id= "thisOne" name= "really" value="{{ids[8]}}"><input class="poster_image_search" type ="image" src="{{img[8]}}"></form></td> <td>
+        <form action = "/movieUpdate" method= "post"><a href="javascript:{}" onclick= "document.getElementById('form9').submit();">{{title[8]}}</a><input type = "hidden" id="thisOne" name = "really" value="{{ids[8]}}"></form>({{year[2]}})</td></tr>
+      <tr> <td> <form id= "form10" action = "/movieUpdate" method="post"><input type = "hidden" id= "thisOne" name= "really" value="{{ids[9]}}"><input class="poster_image_search" type ="image" src="{{img[9]}}"></form></td> <td>
+        <form action = "/movieUpdate" method= "post"><a href="javascript:{}" onclick= "document.getElementById('form10').submit();">{{title[9]}}</a><input type = "hidden" id="thisOne" name = "really" value="{{ids[9]}}"></form>({{year[2]}})</td></tr>
     </tbody>
     </table>
   <!-- </div> -->
