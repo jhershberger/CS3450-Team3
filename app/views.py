@@ -212,7 +212,7 @@ def BasicSearchResults():
         if 'status_code' in api_response.keys():
             url = 'https://valleytechnologies.net/wp-content/uploads/2015/07/error.png'
             img.append(url)
-        elif 'id' not in api_response.keys():
+        elif not api_response['posters']:
             url = 'https://valleytechnologies.net/wp-content/uploads/2015/07/error.png'
             img.append(url)
         else:
