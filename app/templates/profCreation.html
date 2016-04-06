@@ -10,22 +10,32 @@
 </div>
 
 <div id="creation">
-  <form action="create.py">
+  <form action="" method="post">
     First Name:<br>
-    <input type="names" name="first"><br>
+    <input type="names" placeholder="First Name" name="first_name" value="{{
+        request.form.first_name }}"><br>
     Last Name:<br>
-    <input type="names" name="last"><br>
+    <input type="names" placeholder="Last Name" name="last_name" value="{{
+        request.form.last_name }}"><br>
     Username:<br>
-    <input type="text" name="username"><br>
+    <input type="text" placeholder="Username" name="username" value="{{
+        request.form.username }}"><br>
     Password:<br>
-    <input type="password" name="password"><br>
+    <input type="password" placeholder="Password" name="pass" value="{{
+        request.form.pass }}"><br>
     Confirm Password:<br>
     <input type="password" name="confirm"><br>
     Email:<br>
-    <input type="email" name="email"><br>
+    <input type="email" placeholder="Email" name="email" value="{{
+        request.form.email }}"><br>
     <br>
     <input type="submit" value="Submit">
   </form>
+  {% if error1 %}
+      <h3>{{ error1 }}</h3>
+      <p>{{ error2 }}</p>
+      <p>{{ error3 }}</p>
+    {% endif %}
 </div>
 
 {% endblock %}
