@@ -44,7 +44,7 @@ $(document).ready(function(){
 
 					i++;
 				}
-		
+
 
 				$("#loading").hide();
 			}
@@ -59,9 +59,22 @@ function appendDom(response,title,score,id,i){
 			+ '<div class ="col-sm-4"><form action = "/movieUpdate" method="post">'
 			+ '<input type = "hidden" id= "thisOne" name= "really" value="'+id+'">'
 			+ '<input class="poster_image" type ="image" src="' + response + '"></form>'
-				+ '</img></div><div class="col-sm-8"><h1>'+ title +'</h1>'
+				+ '</img><div class= "ratings_box">'
+					+ '<ul id="rating_sloths">'
+					+'<li><img id= rating_sloth src= "/static/images/easyname.png"></li>'
+					+'<li><img id= rating_sloth1 src= "/static/images/easyname.png"></li>'
+					+'<li><img id= rating_sloth src= "/static/images/easyname.png"></li>'
+					+'<li><img id= rating_sloth src= "/static/images/easyname.png"></li>'
+					+'<li><img id= rating_sloth src= "/static/images/easyname.png"></li>'
+					+'<li><img id= rating_sloth src= "/static/images/easyname.png"></li>'
+					+'<li><img id= rating_sloth src= "/static/images/easyname.png"></li>'
+					+'<li><img id= rating_sloth src= "/static/images/easyname.png"></li>'
+					+'<li><img id= rating_sloth src= "/static/images/easyname.png"></li>'
+					+'<li><img id= rating_sloth src= "/static/images/easyname.png"></li>'
+					+'</ul>'
+					+	'</div></div><div class="col-sm-8"><h1>'+ title +'</h1>'
 					+'<h1 id="main-score">'+ score +'</h1>'
-						+ '</div></div>')
+						+ '</div> ' + '</div>')
 }
 
 function appendDom2(title){
