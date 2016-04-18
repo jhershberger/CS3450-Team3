@@ -1,6 +1,9 @@
 
 $(document).ready(function(){
 
+	// $("#rating_sloth1").mouseover(function(){
+  //        $("#rating_sloth").css("opacity", 1);
+  //    });
 
 		var id = $('#id-input').val()
 		$.ajax({
@@ -60,18 +63,18 @@ function appendDom(response,title,score,id,i){
 			+ '<input type = "hidden" id= "thisOne" name= "really" value="'+id+'">'
 			+ '<input class="poster_image" type ="image" src="' + response + '"></form>'
 				+ '</img><div class= "ratings_box">'
-					+ '<ul id="rating_sloths">'
-					+'<li><img id= rating_sloth src= "/static/images/easyname.png"></li>'
-					+'<li><img id= rating_sloth1 src= "/static/images/easyname.png"></li>'
-					+'<li><img id= rating_sloth src= "/static/images/easyname.png"></li>'
-					+'<li><img id= rating_sloth src= "/static/images/easyname.png"></li>'
-					+'<li><img id= rating_sloth src= "/static/images/easyname.png"></li>'
-					+'<li><img id= rating_sloth src= "/static/images/easyname.png"></li>'
-					+'<li><img id= rating_sloth src= "/static/images/easyname.png"></li>'
-					+'<li><img id= rating_sloth src= "/static/images/easyname.png"></li>'
-					+'<li><img id= rating_sloth src= "/static/images/easyname.png"></li>'
-					+'<li><img id= rating_sloth src= "/static/images/easyname.png"></li>'
-					+'</ul>'
+					+ '<div class="rating_sloths">'
+					+'<span><img id= rating_sloth src= "/static/images/easyname.png"></span>'
+					+'<span><img id= rating_sloth src= "/static/images/easyname.png"></span>'
+					+'<span><img id= rating_sloth src= "/static/images/easyname.png"></span>'
+					+'<span><img id= rating_sloth src= "/static/images/easyname.png"></span>'
+					+'<span><img id= rating_sloth src= "/static/images/easyname.png"></span>'
+					+'<span><img id= rating_sloth src= "/static/images/easyname.png"></span>'
+					+'<span><img id= rating_sloth src= "/static/images/easyname.png"></span>'
+					+'<span><img id= rating_sloth src= "/static/images/easyname.png"></span>'
+					+'<span><img id= rating_sloth src= "/static/images/easyname.png"></span>'
+					+'<span><img id= rating_sloth src= "/static/images/easyname.png"></span>'
+					+'</div>'
 					+	'</div></div><div class="col-sm-8"><h1>'+ title +'</h1>'
 					+'<h1 id="main-score">'+ score +'</h1>'
 						+ '</div> ' + '</div>')

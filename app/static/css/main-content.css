@@ -53,7 +53,38 @@
 	height: 40px;
 	width: 50%;
 }
-ul#rating_sloths {
+.rating_sloths {
+	padding-left:0px;
+	padding-top: 5px;
+	padding-right: 10px;
+  unicode-bidi: bidi-override;
+  direction: rtl;
+}
+.rating_sloths > span {
+  display: inline-block;
+  position: relative;
+  width: 1.4em;
+	padding:3px;
+}
+.rating_sloths > span:hover:before,
+.rating_sloths > span:hover ~ span:before {
+   /*content: url("../images/easyname.png");
+   position: absolute;*/
+	 background-image: url('../images/easyname.png');
+    background-size: 26px 19.58px;
+    display: inline-block;
+    width: 19.58px;
+    height: 26px;
+    content:"";
+}
+#rating_sloth{
+	height:auto;
+	width: auto;
+	max-width:200%;
+	max-height:200%;
+	opacity:.5;
+}
+/*ul#rating_sloths {
 	height: 40px;
 	width: 100%;
 	list-style-type: none;
@@ -77,7 +108,10 @@ ul img{
 	opacity: 1;
 }
 
-#rating_sloth1:hover ~ #rating_sloth{
+#rating_sloth1:hover{
+	opacity: 1;
+}
+#rating_sloth1:hover + #rating_sloth {
 	opacity: 1;
 }
 #rating_sloth2:hover {
@@ -102,4 +136,4 @@ ul img{
 	opacity: 1;
 }
 #rating_sloth9:hover {
-	opacity: 1;
+	opacity: 1;*/
