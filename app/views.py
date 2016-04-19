@@ -97,6 +97,20 @@ def profile():
                            friendCount=friendCount,
                            posts=posts)
 
+@app.route('/friendsList')
+@login_required
+def friendsList():
+    friends = [
+        {
+            'username': 'Billy'
+            },
+        {
+           'username': 'JohnBilly'
+            }
+    ]
+
+    return render_template("friendsList.html",
+                           friends = friends)
 
 @app.route('/testSERVER', methods=['POST'])
 def testSERVER():
