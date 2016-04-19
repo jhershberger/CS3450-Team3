@@ -43,6 +43,7 @@
       <strong><a href="friendsList"><font size = "6">{{friendCount}}</strong></font><font size = "6"></a> Friends</font>
     </div>
     <!-- Edit Profile Button -->
+    {% if currentUser == True %}
     <div style = "position: absolute;
                   margin-right: 225px;
                   top: 5%;
@@ -62,6 +63,29 @@
                   border-radius: 3px;">
       <a href="logout" class="btn btn-info" role="button">Logout</a>
     </div>
+    {% endif %}
+    {% if currentUser == False %}
+    {% if isFriend == True %}
+    <div style = "position: absolute;
+                  margin-right: 225px;
+                  top: 5%;
+                  right: 5%;
+                  width: 15%;
+                  height: 20%;
+                  border-radius: 3px;">
+      <button type="button" class="btn btn-primary">Add Friend</button>
+    {% endif %}
+    {% if isFriend == False %}
+    <div style = "position: absolute;
+                  margin-right: 225px;
+                  top: 5%;
+                  right: 5%;
+                  width: 15%;
+                  height: 20%;
+                  border-radius: 3px;">
+      <button type="button" class="btn btn-primary">Remove Friend</button>
+    {% endif %}
+    {% endif %}
   </div>
   <!-- Posts div -->
   <div style = "  position: relative;
@@ -89,6 +113,7 @@
       {% endfor %}
     </div>
     <!-- Write a post... -->
+    {% if currentUser == True %}
     <div style = "position: absolute;
                   margin-right: 125px;
                   top: 10%;
@@ -100,11 +125,13 @@
                   border: solid #000;
                   border-width: 2px;
                   border-radius: 3px;">
+
           <form action="demo_form.asp">
               Write a Post... <input type="text" name="Wrist a Post"><br>
               <input type="submit" value="Submit">
           </form>
     </div>
+    {% endif %}
   </div>
 
 {% endblock %}

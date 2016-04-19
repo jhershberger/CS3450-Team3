@@ -95,7 +95,43 @@ def profile():
                            email=email,
                            username=username,
                            friendCount=friendCount,
-                           posts=posts)
+                           posts=posts,
+                           currentUser = True)
+
+@app.route('/friendsProfile')
+@login_required
+def friendsProfile():
+    # try:
+    #     conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
+    #     print("Successful connection to the database!")
+    # except:
+    #     print("I am unable to connect to the database")
+
+    # cur = conn.cursor()
+    # user = current_user.first_name
+    user = str(User.instances[0].first_name) + " " + str(User.instances[0].last_name)
+    email = str(User.instances[0].email)
+    username = str(User.instances[0].username)
+    friendCount = _m.queryFriendCount(User.instances[0].id)
+    posts = [  # fake array of posts
+        {
+            'author': {'username': 'John'},
+            'body': 'What we do in the shadows is amazing!!'
+        },
+        {
+            'author': {'username': 'Billy'},
+            'body': 'The Avengers movie was so cool!'
+        }
+    ]
+    return render_template("profile.html",
+                           title='Profile',
+                           user=user,
+                           email=email,
+                           username=username,
+                           friendCount=friendCount,
+                           posts=posts,
+                           currentUser = False,
+                           isFriend = False)
 
 @app.route('/friendsList')
 @login_required
