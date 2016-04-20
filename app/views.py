@@ -206,6 +206,13 @@ def moviePage():
 
         return render_template("moviePage.html", title=t["title"], year=year, plot=plot, rating=rating,runtime=runtime, director=director, img=url, actor=names, genre=genre)  # render the moviePage template
 
+@app.route('/rateMovie',methods=['POST','GET'])
+def rateMovie():
+    print("HI")
+    rating = request.form['score']
+    print (rating)
+    return json.dumps({'status':'OK','score':rating})
+
 @app.route('/BasicSearchResults',methods=['POST'])
 def BasicSearchResults():
     global key

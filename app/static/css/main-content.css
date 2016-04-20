@@ -49,11 +49,32 @@
 	padding-right: 150px;
 }
 .ratings_box{
+	display:inline-block;
+	/*position: relative;*/
 	background-image: url('../images/ratingsbar.jpg');
+	background-size: 100%;
+	background-repeat: no-repeat;
 	height: 40px;
 	width: 50%;
 }
-.rating_sloths {
+
+#slider{
+	margin-top: 2%;
+}
+#buttonpush{
+	margin-left:110%;
+	margin-top:0%;
+	margin-bottom: 0%;
+}
+.ratings_box > form{
+
+	margin-left: 110%;
+	/*margin-bottom:50%;*/
+	/*padding-bottom: 50%;*/
+	}
+
+
+/*.rating_sloths {
 	padding-left:0px;
 	padding-top: 5px;
 	padding-right: 10px;
@@ -75,7 +96,7 @@
     display: inline-block;
     width: 19.58px;
     height: 26px;
-    content:"";
+    content:"";*/
 }
 #rating_sloth{
 	height:auto;

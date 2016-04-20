@@ -23,7 +23,7 @@ $(document).ready(function(){
 				while(i<10){
 					// console.log(i)
 					// console.log(obj.list[i]);
-					appendDom(obj.list[i],obj.title[i],obj.score[i],obj.ids[i]);
+					appendDom(obj.list[i],obj.title[i],obj.score[i],obj.ids[i],i);
 
 					i++;
 				}
@@ -56,6 +56,7 @@ $(document).ready(function(){
 });
 
 
+
 function appendDom(response,title,score,id,i){
 	$('#main-block').append(
 		'<div class = "row new_block">'
@@ -63,21 +64,22 @@ function appendDom(response,title,score,id,i){
 			+ '<input type = "hidden" id= "thisOne" name= "really" value="'+id+'">'
 			+ '<input class="poster_image" type ="image" src="' + response + '"></form>'
 				+ '</img><div class= "ratings_box">'
-					+ '<div class="rating_sloths">'
-					+'<span><img id= rating_sloth src= "/static/images/easyname.png"></span>'
-					+'<span><img id= rating_sloth src= "/static/images/easyname.png"></span>'
-					+'<span><img id= rating_sloth src= "/static/images/easyname.png"></span>'
-					+'<span><img id= rating_sloth src= "/static/images/easyname.png"></span>'
-					+'<span><img id= rating_sloth src= "/static/images/easyname.png"></span>'
-					+'<span><img id= rating_sloth src= "/static/images/easyname.png"></span>'
-					+'<span><img id= rating_sloth src= "/static/images/easyname.png"></span>'
-					+'<span><img id= rating_sloth src= "/static/images/easyname.png"></span>'
-					+'<span><img id= rating_sloth src= "/static/images/easyname.png"></span>'
-					+'<span><img id= rating_sloth src= "/static/images/easyname.png"></span>'
-					+'</div>'
+					+ '<input id="slider" type="range" min="0" max="10" value="0" step=".5" onchange="showValue'+i+'(this.value)"/>'
+					+'<script type="text/javascript">'
+					+'function showValue'+i+'(newValue)'
+					+'{'
+						+'document.getElementById("val'+i+'").innerHTML=newValue;'
+						+'document.getElementById("rating'+i+'").value=newValue;'
+					+'}'
+					+'</script>'
+					+'<form action="/rateMovie" method="post">'
+				 +'<span id="val'+i+'">0</span>'
+				 + '<input type = "hidden" id= "rating'+i+'" name= "score" value="k">'
+				 +'<input id= "buttonpush" type="submit" value="RATE THIS MOVIE">'
+			  	+'</form>'
 					+	'</div></div><div class="col-sm-8"><h1>'+ title +'</h1>'
 					+'<h1 id="main-score">'+ score +'</h1>'
-						+ '</div> ' + '</div>')
+						+ '</div>' + '</div>')
 }
 
 function appendDom2(title){
