@@ -153,17 +153,21 @@ def friendsList():
         else:
             where_statement += "u.user_id = " + str(ids[0][0][x]) + " OR "
 
-    cur.execute("SELECT u.first_name, u.last_name, u.username FROM team3.user AS u WHERE " + where_statement)
+    if (where_statement != ""):
+        cur.execute("SELECT u.first_name, u.last_name, u.username FROM team3.user AS u WHERE " + where_statement)
+        friends = cur.fetchall()
 
-    friends = cur.fetchall()
+        friends_usernames = []
 
-    friends_usernames = []
+        for x in range (0, len(friends)):
+            friends_usernames.append(friends[x][2])
+        
+        return render_template("friendsList.html",
+                               friends = friends_usernames)
 
-    for x in range (0, len(friends)):
-        friends_usernames.append(friends[x][2])
-    
-    return render_template("friendsList.html",
-                           friends = friends_usernames)
+    else:
+        return render_template("friendsList.html",
+                               friends = [])
 
 @app.route('/testSERVER', methods=['POST'])
 def testSERVER():
