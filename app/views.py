@@ -136,17 +136,34 @@ def friendsProfile():
 @app.route('/friendsList')
 @login_required
 def friendsList():
-    friends = [
-        {
-            'username': 'Billy'
-            },
-        {
-           'username': 'JohnBilly'
-            }
-    ]
+    try:
+        conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
+        print("Successful connection to the database!")
+    except:
+        print("I am unable to connect to the database")
+    cur = conn.cursor()
+    cur.execute("SELECT f.friend_id FROM team3.user AS u JOIN team3.friends AS f ON (f.user_id = u.user_id) WHERE u.user_id = " + str(User.instances[0].id))
+    
+    ids = cur.fetchall()
 
+    where_statement = ""
+    for x in range (0, len(ids[0][0])):
+        if(x == len(ids[0])):
+            where_statement += "u.user_id = " + str(ids[0][0][x])
+        else:
+            where_statement += "u.user_id = " + str(ids[0][0][x]) + " OR "
+
+    cur.execute("SELECT u.first_name, u.last_name, u.username FROM team3.user AS u WHERE " + where_statement)
+
+    friends = cur.fetchall()
+
+    friends_usernames = []
+
+    for x in range (0, len(friends)):
+        friends_usernames.append(friends[x][2])
+    
     return render_template("friendsList.html",
-                           friends = friends)
+                           friends = friends_usernames)
 
 @app.route('/testSERVER', methods=['POST'])
 def testSERVER():
