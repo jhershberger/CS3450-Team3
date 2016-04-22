@@ -76,8 +76,11 @@ def profile():
     # cur = conn.cursor()
     # user = current_user.first_name
     user = str(User.instances[0].first_name) + " " + str(User.instances[0].last_name)
+    first_name = str(User.instances[0].first_name)
+    last_name = str(User.instances[0].last_name)
     email = str(User.instances[0].email)
     username = str(User.instances[0].username)
+    user_password = str(User.instances[0].password)
     friendCount = _m.queryFriendCount(User.instances[0].id)
     posts = [  # fake array of posts
         {
@@ -96,7 +99,10 @@ def profile():
                            username=username,
                            friendCount=friendCount,
                            posts=posts,
-                           currentUser = True)
+                           currentUser = True,
+                           first_name=first_name,
+                           last_name=last_name,
+                           user_password=user_password)
 
 @app.route('/friendsProfile')
 @login_required
