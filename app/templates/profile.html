@@ -20,7 +20,7 @@
                   width: 30%;
                   height: 15%;
                   border-radius: 3px;">
-      <strong><font size = "6">{{user}}</font></strong>
+      <strong><font size = "6">{{first_name}} {{last_name}}</font></strong>
       <p><b>Email: </b>{{email}}</p>
       <p><b>User Name: </b>{{username}}</p>
     </div>
@@ -51,7 +51,7 @@
                   width: 15%;
                   height: 20%;
                   border-radius: 3px;">
-      <button type="button" class="btn btn-primary">Edit Profile</button>
+      <button type="button" class="btn btn-primary" id="edit-profile-btn">Edit Profile</button>
     </div>
     <!-- Edit Profile Button -->
     <div style = "position: absolute;
@@ -63,6 +63,53 @@
                   border-radius: 3px;">
       <a href="logout" class="btn btn-info" role="button">Logout</a>
     </div>
+
+      <!-- Modal -->
+      <div class="modal fade" id="editModal" role="dialog">
+        <div class="modal-dialog">
+
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 style="color:#286090;"><span class="glyphicon glyphicon-lock"></span> Edit Profile</h4>
+            </div>
+            <div class="modal-body">
+              <form role="form">
+                <div class="form-group">
+                  <label for="username"><span class="glyphicon glyphicon-user edit-form-btn"></span> Username</label>
+                  <input type="text" class="form-control" id="edit-username" placeholder="Enter Username" value={{user}} required>
+                </div>
+                <div class="form-group">
+                  <label for="email"><span class="glyphicon glyphicon-envelope edit-form-btn"></span> Email</label>
+                  <input type="text" class="form-control" id="edit-email" placeholder="Enter Email" value={{email}} required>
+                </div>
+                <div class="form-group">
+                  <label for="f-name"> First Name</label>
+                  <input type="text" class="form-control" id="edit-firstname" placeholder="Enter First Name" value={{first_name}} required>
+                </div>
+                <div class="form-group">
+                  <label for="l-name"> Last Name</label>
+                  <input type="text" class="form-control" id="edit-lastname" placeholder="Enter Last Name" value={{last_name}} required>
+                </div>
+                <div class="form-group">
+                  <label for="pass"><span class="glyphicon glyphicon-ok-sign edit-form-btn"></span> Password</label>
+                  <input type="password" input-type="hidden" class="form-control" id="edit-pass" placeholder="Enter Password" value={{user_password}} required>
+                </div>
+                <div class="form-group">
+                  <label for="c-pass"><span class="glyphicon glyphicon-ok-circle edit-form-btn"></span> Password Confirm</label>
+                  <input type="password" class="form-control" id="edit-confirm-pass" placeholder="Confirm Password" required>
+                </div>
+                <button type="submit" class="btn btn-default btn-primary btn-block"><span class="glyphicon glyphicon-pencil"></span> Save Changes</button>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-default btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     {% endif %}
     {% if currentUser == False %}
     {% if isFriend == True %}
@@ -134,4 +181,11 @@
     {% endif %}
   </div>
 
+<script>
+$(document).ready(function(){
+    $("#edit-profile-btn").click(function(){
+        $("#editModal").modal();
+    });
+});
+</script>
 {% endblock %}
