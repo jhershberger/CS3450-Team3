@@ -172,7 +172,7 @@ RawBlameHistory     192 lines (185 sloc)  7.55 KB
                   border-width: 2px;
                   border-radius: 3px;">
       {% for post in posts %}
-      <div><p>{{ post.author.username }} says: <b>{{ post.body }}</b></p></div>
+      <div><p>{{posts}}</b></p></div>
       {% endfor %}
     </div>
     <!-- Write a post... -->
@@ -189,8 +189,8 @@ RawBlameHistory     192 lines (185 sloc)  7.55 KB
                   border-width: 2px;
                   border-radius: 3px;">
 
-          <form action="demo_form.asp">
-              Write a Post... <input type="text" name="Wrist a Post"><br>
+          <form action="\postCreate" method = "POST">
+              Write a Post... <input type="text" placeholder="Write a Post" name = "post" value = "{{request.form.post}}"><br>
               <input type="submit" value="Submit">
           </form>
     </div>
