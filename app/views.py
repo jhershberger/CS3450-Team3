@@ -189,6 +189,37 @@ def addFriend(friend_id):
 
     return redirect(exit_url)
 
+@app.route('/<friend_id>deleteFriend')
+@login_required
+def deleteFriend(friend_id):
+    try:
+        conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
+        print("Successful connection to the database!")
+    except:
+        print("I am unable to connect to the database")
+
+    cur = conn.cursor()
+
+    your_friend_size = _m.queryFriendCount(User.instances[0].id)
+    if (your_friend_size == None):
+        return redirect(str(friend_username) + "Profile")
+    else:
+        your_friend_size = your_friend_size -1
+
+    final_string = "UPDATE team3.friends SET friend_id = ARRAY_REMOVE(friend_id, " + str(friend_id) + ") WHERE user_id = " + str(User.instances[0].id)
+    cur.execute(final_string)
+    conn.commit()
+
+    cur.execute("SELECT u.username FROM team3.user AS u WHERE u.user_id = '" + friend_id + "'")
+
+    friend = cur.fetchall()
+
+    friend_username = friend[0][0]
+
+    exit_url = str(friend_username) + "Profile"
+
+    return redirect(exit_url)
+
 @app.route('/friendsList')
 @login_required
 def friendsList():
