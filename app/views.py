@@ -82,79 +82,6 @@ def profile():
     username = str(User.instances[0].username)
     user_password = str(User.instances[0].password)
     friendCount = _m.queryFriendCount(User.instances[0].id)
-    try:
-        conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
-        print("Successful connection to the database!")
-    except:
-        print("I am unable to connect to the database")
-
-    cur = conn.cursor()
-
-    #select the users post history
-    try:
-        cur.execute('\
-            SELECT\
-                post\
-            FROM team3.posts\
-            WHERE\
-                user_id = %s\
-                AND username = %s\
-        ', (User.instances[0].id, User.instances[0].username))
-    except psycopg2 as e:
-        pass
-
-    posts = cur.fetchall()
-    return render_template("profile.html",
-                           title='Profile',
-                           user=user,
-                           email=email,
-                           username=username,
-                           friendCount=friendCount,
-                           posts=posts,
-                           currentUser = True,
-                           first_name=first_name,
-                           last_name=last_name,
-                           user_password=user_password)
-
-@app.route('/postCreate', methods=['GET','POST'])
-@login_required
-def postCreation():
-    if(request.method == 'POST'):
-        try:
-            conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
-            print("Successful connection to the database!")
-        except:
-            print("I am unable to connect to the database")
-
-        cur = conn.cursor()
-        #insert a post
-        try:
-            cur.execute('\
-                INSERT INTO team3.posts (user_id, post, username) VALUES (\
-                    %s,%s,%s)',(str(User.instances[0].id),
-                    request.form['post'],
-                    str(User.instances[0].username)))
-            conn.commit()
-        except psycopg2 as e:
-            pass
-
-    return redirect(url_for('profile'))
-    
-@app.route('/friendsProfile')
-@login_required
-def friendsProfile():
-    # try:
-    #     conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
-    #     print("Successful connection to the database!")
-    # except:
-    #     print("I am unable to connect to the database")
-
-    # cur = conn.cursor()
-    # user = current_user.first_name
-    user = str(User.instances[0].first_name) + " " + str(User.instances[0].last_name)
-    email = str(User.instances[0].email)
-    username = str(User.instances[0].username)
-    friendCount = _m.queryFriendCount(User.instances[0].id)
     posts = [  # fake array of posts
         {
             'author': {'username': 'John'},
@@ -172,8 +99,64 @@ def friendsProfile():
                            username=username,
                            friendCount=friendCount,
                            posts=posts,
-                           currentUser = False,
-                           isFriend = False)
+                           currentUser = True,
+                           first_name=first_name,
+                           last_name=last_name,
+                           user_password=user_password)
+
+@app.route('/<friend_username>Profile')
+@login_required
+def friendsProfile(friend_username):
+    try:
+        conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
+        print("Successful connection to the database!")
+    except:
+        print("I am unable to connect to the database")
+
+    cur = conn.cursor()
+
+    cur.execute("SELECT u.user_id, u.first_name, u.last_name, u.username, u.email FROM team3.user AS u WHERE u.username = '" + friend_username + "'")
+
+    user_info = cur.fetchall()
+
+    user_id = user_info[0][0]
+    first_name = user_info[0][1]
+    last_name = user_info[0][2]
+    username = user_info[0][3]
+    email = user_info[0][4]
+    friendCount = _m.queryFriendCount(user_id)
+    user = first_name + " " + last_name
+
+    #makes sure profile visited is not the current user
+    if (User.instances[0].id == user_id):
+        currentUser = True
+    else:
+        currentUser = False
+
+    #checks if users profile is a friend of current user
+    if (currentUser == False):
+        cur.execute("SELECT f.friend_id FROM team3.friends AS f WHERE f.user_id = " + str(user_id))
+
+        friends_list = cur.fetchall()
+        if (User.instances[0].id in friends_list[0]):
+            isFriend = True
+        else:
+            isFriend = False
+
+    else:
+        isFriend = False
+
+    return render_template("profile.html",
+                           title='Profile',
+                           user = user,
+                           first_name = first_name,
+                           last_name = last_name,
+                           email=email,
+                           username=username,
+                           friendCount=friendCount,
+                           posts="",
+                           currentUser = currentUser,
+                           isFriend = isFriend)
 
 @app.route('/friendsList')
 @login_required
@@ -185,7 +168,7 @@ def friendsList():
         print("I am unable to connect to the database")
     cur = conn.cursor()
     cur.execute("SELECT f.friend_id FROM team3.user AS u JOIN team3.friends AS f ON (f.user_id = u.user_id) WHERE u.user_id = " + str(User.instances[0].id))
-
+    
     ids = cur.fetchall()
 
     where_statement = ""
@@ -203,7 +186,7 @@ def friendsList():
 
         for x in range (0, len(friends)):
             friends_usernames.append(friends[x][2])
-
+        
         return render_template("friendsList.html",
                                friends = friends_usernames)
 
