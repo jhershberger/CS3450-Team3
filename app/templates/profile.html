@@ -165,7 +165,7 @@
 
     {% endif %}
     {% if currentUser == False %}
-    {% if isFriend == True %}
+    {% if isFriend == False %}
     <div style = "position: absolute;
                   margin-right: 225px;
                   top: 5%;
@@ -173,9 +173,9 @@
                   width: 15%;
                   height: 20%;
                   border-radius: 3px;">
-      <button type="button" class="btn btn-primary">Add Friend</button>
+      <a class="btn btn-primary" href="{{user_id}}addFriend" role="button">Add Friend</a>
     {% endif %}
-    {% if isFriend == False %}
+    {% if isFriend == True %}
     <div style = "position: absolute;
                   margin-right: 225px;
                   top: 5%;
