@@ -94,6 +94,7 @@ def profile():
     ]
     return render_template("profile.html",
                            title='Profile',
+                           user_id = User.instances[0].id,
                            user=user,
                            email=email,
                            username=username,
@@ -220,16 +221,16 @@ def deleteFriend(friend_id):
 
     return redirect(exit_url)
 
-@app.route('/friendsList')
+@app.route('/<friend_id>friendsList')
 @login_required
-def friendsList():
+def friendsList(friend_id):
     try:
         conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
         print("Successful connection to the database!")
     except:
         print("I am unable to connect to the database")
     cur = conn.cursor()
-    cur.execute("SELECT f.friend_id FROM team3.user AS u JOIN team3.friends AS f ON (f.user_id = u.user_id) WHERE u.user_id = " + str(User.instances[0].id))
+    cur.execute("SELECT f.friend_id FROM team3.user AS u JOIN team3.friends AS f ON (f.user_id = u.user_id) WHERE u.user_id = " + str(friend_id))
     
     ids = cur.fetchall()    
 
