@@ -2,6 +2,10 @@
 	color: #286090;
 }
 
+.warning-color {
+	color: #c9302c;
+}
+
 .new_block{
 	display:block;
 	margin-right: 0;
