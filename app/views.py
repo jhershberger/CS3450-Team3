@@ -67,14 +67,13 @@ def baseUpdater():
 @app.route('/profile')
 @login_required
 def profile():
-    # try:
-    #     conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
-    #     print("Successful connection to the database!")
-    # except:
-    #     print("I am unable to connect to the database")
+    try:
+        conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
+        print("Successful connection to the database!")
+    except:
+        print("I am unable to connect to the database")
 
-    # cur = conn.cursor()
-    # user = current_user.first_name
+    cur = conn.cursor()
     user = str(User.instances[0].first_name) + " " + str(User.instances[0].last_name)
     first_name = str(User.instances[0].first_name)
     last_name = str(User.instances[0].last_name)
@@ -134,20 +133,20 @@ def friendsProfile(friend_username):
         currentUser = False
 
     #checks if users profile is a friend of current user
-    if (currentUser == False):
-        cur.execute("SELECT f.friend_id FROM team3.friends AS f WHERE f.user_id = " + str(user_id))
+    cur.execute("SELECT f.friend_id FROM team3.friends AS f WHERE f.user_id = " + str(User.instances[0].id))
 
-        friends_list = cur.fetchall()
-        if (User.instances[0].id in friends_list[0]):
-            isFriend = True
-        else:
-            isFriend = False
-
+    friends_list = cur.fetchall()
+    if (user_id in friends_list[0][0]):
+        isFriend = True
     else:
         isFriend = False
 
+
+    
+
     return render_template("profile.html",
                            title='Profile',
+                           user_id = user_id,
                            user = user,
                            first_name = first_name,
                            last_name = last_name,
@@ -157,6 +156,37 @@ def friendsProfile(friend_username):
                            posts="",
                            currentUser = currentUser,
                            isFriend = isFriend)
+
+@app.route('/<friend_id>addFriend')
+@login_required
+def addFriend(friend_id):
+    try:
+        conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
+        print("Successful connection to the database!")
+    except:
+        print("I am unable to connect to the database")
+
+    cur = conn.cursor()
+
+    your_friend_size = _m.queryFriendCount(User.instances[0].id)
+    if (your_friend_size == None):
+        your_friend_size = 0
+    else:
+        your_friend_size = your_friend_size
+
+    final_string = "UPDATE team3.friends SET friend_id[" + str(your_friend_size) + "] = " + str(friend_id) + " WHERE user_id = " + str(User.instances[0].id)
+
+    cur.execute(final_string)
+
+    cur.execute("SELECT u.username FROM team3.user AS u WHERE u.user_id = '" + friend_id + "'")
+
+    friend = cur.fetchall()
+
+    friend_username = friend[0][0]
+
+    exit_url = str(friend_username) + "Profile"
+
+    return redirect(exit_url)
 
 @app.route('/friendsList')
 @login_required
@@ -169,14 +199,16 @@ def friendsList():
     cur = conn.cursor()
     cur.execute("SELECT f.friend_id FROM team3.user AS u JOIN team3.friends AS f ON (f.user_id = u.user_id) WHERE u.user_id = " + str(User.instances[0].id))
     
-    ids = cur.fetchall()
+    ids = cur.fetchall()    
+
+    ids_list = ids[0][0]
 
     where_statement = ""
-    for x in range (0, len(ids[0][0])):
-        if(x == len(ids[0])):
-            where_statement += "u.user_id = " + str(ids[0][0][x])
+    for x in range (0, len(ids_list)):
+        if(x == len(ids_list)-1):
+            where_statement += "u.user_id = " + str(ids_list[x])
         else:
-            where_statement += "u.user_id = " + str(ids[0][0][x]) + " OR "
+            where_statement += "u.user_id = " + str(ids_list[x]) + " OR "
 
     if (where_statement != ""):
         cur.execute("SELECT u.first_name, u.last_name, u.username FROM team3.user AS u WHERE " + where_statement)
