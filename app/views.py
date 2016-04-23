@@ -10,6 +10,7 @@ import webbrowser
 import json
 import requests
 import random
+import sys
 
 # load the adapter
 import psycopg2
@@ -391,6 +392,46 @@ def login():
             login_user(User(query_result[0][0],query_result[0][1],query_result[0][2],query_result[0][3],query_result[0][4],query_result[0][5]))
             return redirect(url_for('profile'))
     return render_template('login.html', error=error)
+
+@app.route('/editProfile', methods=['GET', 'POST'])
+def editProfile():
+    error = None
+    if (request.method == 'POST'):
+        print('User.instances.user_id = ' + str(User.instances[0].id), file=sys.stderr)
+    #     print('pass2 = ' + str(request.form['user_password_confirm']), file=sys.stderr)
+        try:
+            conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
+            print("Successful connection to the database!")
+        except:
+            print("I am unable to connect to the database")
+        cur = conn.cursor()
+
+        try:
+            cur.execute('\
+                            UPDATE team3.user SET\
+                            username = %s,\
+                            email = %s,\
+                            first_name = %s,\
+                            last_name = %s,\
+                            pass = %s\
+                            WHERE user_id = %s\
+                        ', (request.form['username'],
+                            request.form['email'],
+                            request.form['first_name'],
+                            request.form['last_name'],
+                            request.form['user_password'],
+                            User.instances[0].id))
+            conn.commit()
+        except psycopg2 as e:
+            pass
+
+        User.instances[0].username = request.form['username']
+        User.instances[0].email = request.form['email']
+        User.instances[0].first_name = request.form['first_name']
+        User.instances[0].last_name = request.form['last_name']
+        User.instances[0].password = request.form['user_password']
+        return redirect(url_for('profile'))
+
 
 @app.route('/create', methods=['GET', 'POST'])
 def creation():

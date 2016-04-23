@@ -64,7 +64,7 @@
       <a href="logout" class="btn btn-info" role="button">Logout</a>
     </div>
 
-      <!-- Modal -->
+    <!-- Modal -->
       <div class="modal fade" id="editModal" role="dialog">
         <div class="modal-dialog">
 
@@ -74,34 +74,58 @@
               <button type="button" class="close" data-dismiss="modal">&times;</button>
               <h4 style="color:#286090;"><span class="glyphicon glyphicon-lock"></span> Edit Profile</h4>
             </div>
-            <div class="modal-body">
-              <form role="form">
+            <div class="modal-body" id="editProfile">
+              <form role="form" action="editProfile" method="POST">
                 <div class="form-group">
                   <label for="username"><span class="glyphicon glyphicon-user edit-form-btn"></span> Username</label>
-                  <input type="text" class="form-control" id="edit-username" placeholder="Enter Username" value="{{username}} {{request.form.username}}" required>
+                  <input name="username" type="text" class="form-control" id="edit-username" placeholder="Enter Username" value="{{username}}" required>
                 </div>
                 <div class="form-group">
                   <label for="email"><span class="glyphicon glyphicon-envelope edit-form-btn"></span> Email</label>
-                  <input type="text" class="form-control" id="edit-email" placeholder="Enter Email" value="{{email}}" required>
+                  <input name="email" type="text" class="form-control" id="edit-email" placeholder="Enter Email" value="{{email}}" required>
                 </div>
                 <div class="form-group">
                   <label for="f-name"> First Name</label>
-                  <input type="text" class="form-control" id="edit-firstname" placeholder="Enter First Name" value="{{first_name}}" required>
+                  <input name="first_name" type="text" class="form-control" id="edit-firstname" placeholder="Enter First Name" value="{{first_name}}" required>
                 </div>
                 <div class="form-group">
                   <label for="l-name"> Last Name</label>
-                  <input type="text" class="form-control" id="edit-lastname" placeholder="Enter Last Name" value="{{last_name}}" required>
+                  <input name="last_name" type="text" class="form-control" id="edit-lastname" placeholder="Enter Last Name" value="{{last_name}}" required>
                 </div>
                 <div class="form-group">
                   <label for="pass"><span class="glyphicon glyphicon-ok-sign edit-form-btn"></span> Password</label>
-                  <input type="password" input-type="hidden" class="form-control" id="edit-pass" placeholder="Enter Password" value="{{user_password}}" required>
+                  <input name="user_password" type="text" input-type="hidden" class="form-control" id="edit-pass" placeholder="Enter Password" value="{{user_password}}" required>
                 </div>
-                <div class="form-group">
+                <!-- <div class="form-group">
                   <label for="c-pass"><span class="glyphicon glyphicon-ok-circle edit-form-btn"></span> Password Confirm</label>
-                  <input type="password" class="form-control" id="edit-confirm-pass" placeholder="Confirm Password" value="{{request.form.user_password_confirm}}" required>
-                </div>
-                <button type="submit" class="btn btn-default btn-primary btn-block"><span class="glyphicon glyphicon-pencil"></span> Save Changes</button>
+                  <input name="user_password_confirm" type="password" class="form-control" id="edit-confirm-pass" placeholder="Confirm Password" value="{{user_password_confirm}}" oninput="check(this, 'pass2')" required>
+                  <script language='javascript' type='text/javascript'>
+                    function check(input, pass) {
+                        // console.log("input: ", input.value);
+                        // console.log("$('#edit-pass').val(): ", $('#edit-pass').val());
+                        if (pass == 'pass1') {
+                          if (input.value != $('#edit-confirm-pass').val()) {
+                              input.setCustomValidity('Password Must be Matching.');
+                          } else {
+                              // input is valid -- reset the error message
+                              input.setCustomValidity('');
+                          }
+                        } else {
+                          if (input.value != $('#edit-pass').val()) {
+                              input.setCustomValidity('Password Must be Matching.');
+                          } else {
+                              // input is valid -- reset the error message
+                              input.setCustomValidity('');
+                          }
+                        }
+                    }
+                </script>
+                </div> -->
+                <button type="submit" value="Submit" class="btn btn-default btn-primary btn-block"><span class="glyphicon glyphicon-pencil"></span> Save Changes</button>
               </form>
+              {% if error %}
+              <h3>{{ error }}</h3>
+              {% endif %}
             </div>
             <div class="modal-footer">
               <button type="submit" class="btn btn-default btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
@@ -224,5 +248,3 @@ $(document).ready(function(){
 });
 </script>
 {% endblock %}
-Status API Training Shop Blog About
-© 2016 GitHub, Inc. Terms Privacy Security Contact Help
