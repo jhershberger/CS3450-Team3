@@ -176,8 +176,8 @@ def addFriend(friend_id):
         your_friend_size = your_friend_size
 
     final_string = "UPDATE team3.friends SET friend_id[" + str(your_friend_size) + "] = " + str(friend_id) + " WHERE user_id = " + str(User.instances[0].id)
-
     cur.execute(final_string)
+    conn.commit()
 
     cur.execute("SELECT u.username FROM team3.user AS u WHERE u.user_id = '" + friend_id + "'")
 
