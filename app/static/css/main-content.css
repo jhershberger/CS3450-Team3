@@ -6,6 +6,10 @@
 	color: #c9302c;
 }
 
+.photo-upload-btn {
+	width: 200px;
+}
+
 .new_block{
 	display:block;
 	margin-right: 0;

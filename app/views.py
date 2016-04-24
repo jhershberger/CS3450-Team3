@@ -11,6 +11,8 @@ import json
 import requests
 import random
 import sys
+import os
+from werkzeug import secure_filename
 
 # load the adapter
 import psycopg2
@@ -531,6 +533,20 @@ def editProfile():
         User.instances[0].last_name = request.form['last_name']
         User.instances[0].password = request.form['user_password']
         return redirect(url_for('profile'))
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ['png','jpg']
+
+@app.route('/upload_photo', methods=['GET', 'POST'])
+def upload_photo():
+    if request.method == 'POST':
+        file = request.files['file']
+        if file and allowed_file(file.filename):
+            filename = str(User.instances[0].username) + ".png"
+            file.save(os.path.join(str(os.getcwd()) + "\\app\\static\\images\\user_images", filename))
+            return redirect(url_for('profile',
+                                    filename=filename))
 
 
 @app.route('/create', methods=['GET', 'POST'])
