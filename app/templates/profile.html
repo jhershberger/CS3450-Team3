@@ -145,19 +145,44 @@
               <button type="button" class="close" data-dismiss="modal">&times;</button>
               <h4 style="color:#c9302c;"><span class="glyphicon glyphicon-exclamation-sign"></span> Delete Profile?</h4>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="deleteProfile">
               <h3>Are you sure you would like to delete your profile?  This cannot be undone!</h3>
               <br />
-              <form role="form">
+              <form role="form" action="deleteProfile" method="POST">
                 <div class="form-group">
-                  <label for="profile-delete"><span class="glyphicon glyphicon-envelope warning-color"></span> Email</label>
-                  <input type="text" class="form-control" id="delete-email" placeholder="Email of Profile to be Deleted" required>
+                  <label for="email-delete"><span class="glyphicon glyphicon-envelope warning-color"></span> Email/Username</label>
+                  <input name="delete_email" type="text" class="form-control" id="delete-email" value="{{request.form.email}}" placeholder="Email/Username of Profile to be Deleted" required>
                 </div>
-                <button type="submit" class="btn btn-default btn-primary btn-block btn-danger"><span class="glyphicon glyphicon-pencil"></span> DELETE PROFILE</button>
+                <div class="form-group">
+                  <label for="pass-delete"><span class="glyphicon glyphicon-lock warning-color"></span> Password</label>
+                  <input name="delete_pass" type="text" class="form-control" id="delete-pass" value="{{request.form.delete_pass}}" placeholder="Enter Password" required>
+                </div>
+                <button value="submit" type="submit" class="btn btn-default btn-primary btn-block btn-danger"><span class="glyphicon glyphicon-pencil"></span> DELETE PROFILE</button>
               </form>
             </div>
             <div class="modal-footer">
               <button type="submit" id="delete-cancel-btn" class="btn btn-default btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal -->
+      <div class="modal fade" id="incorrectPassModal" role="dialog">
+        <div class="modal-dialog">
+
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 style="color:#c9302c;"><span class="glyphicon glyphicon-exclamation-sign"></span> Delete Profile?</h4>
+            </div>
+            <div class="modal-body">
+              <h3>You have enetered your password and/or email incorrectly.</h3>
+              <br />
+              <form role="form">
+                <button type="submit" class="btn btn-default btn-primary btn-block btn-danger"><span class="glyphicon glyphicon-pencil"></span> OK</button>
+              </form>
             </div>
           </div>
         </div>
@@ -236,6 +261,13 @@
 
 <script>
 $(document).ready(function(){
+    console.log("urL :", window.location.href.search(/pass_error/i))
+    if (window.location.href.search(/pass_error/i) == -1) {
+        console.log("Everything is just fine ;)")
+    } else {
+      console.log("Email and/or Password was incorrect!");
+      $("#incorrectPassModal").modal();
+    }
     $("#edit-profile-btn").click(function(){
         $("#editModal").modal();
     });

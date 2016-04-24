@@ -1,5 +1,5 @@
 import flask
-from flask import Flask, render_template, flash, redirect, url_for, request, Response
+from flask import Flask, render_template, flash, redirect, url_for, request, Response, jsonify
 from app import app, login_manager
 from .forms import LoginForm
 from .models import User
@@ -457,12 +457,48 @@ def login():
             return redirect(url_for('profile'))
     return render_template('login.html', error=error)
 
+@app.route('/deleteProfile', methods=['GET', 'POST'])
+def deleteProfile():
+
+    print('EMAIL ENTERED: ' + request.form['delete_email'], file=sys.stderr)
+    print('PASSWORD ENTERED: ' + request.form['delete_pass'], file=sys.stderr)
+    if (request.method == 'POST'):
+        try:
+            conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
+            print("Successful connection to the database!")
+        except:
+            print("I am unable to connect to the database")
+
+        cur = conn.cursor()
+        cur.execute('\
+                        SELECT *\
+                        FROM team3.user\
+                        WHERE\
+                            (email = %s OR username = %s)\
+                            AND pass = %s\
+                    ',(request.form['delete_email'],request.form['delete_email'],request.form['delete_pass']))
+
+        if (len(cur.fetchall()) <= 0):
+            return redirect('profile?pass_error=1')
+        else:
+            cur = conn.cursor()
+            cur.execute('\
+                            DELETE FROM team3.user\
+                            WHERE (email = %s\
+                            OR username = %s)\
+                        ',(request.form['delete_email'],request.form['delete_email']))
+            conn.commit()
+            return redirect(url_for('logout'))
+    return redirect(url_for('profile'))
+
+
+
 @app.route('/editProfile', methods=['GET', 'POST'])
 def editProfile():
     error = None
     if (request.method == 'POST'):
-        print('User.instances.user_id = ' + str(User.instances[0].id), file=sys.stderr)
-    #     print('pass2 = ' + str(request.form['user_password_confirm']), file=sys.stderr)
+        # print('User.instances.user_id = ' + str(User.instances[0].id), file=sys.stderr)
+        print('pass2 = ' + str(request.form['user_password_confirm']), file=sys.stderr)
         try:
             conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
             print("Successful connection to the database!")
