@@ -497,8 +497,8 @@ def deleteProfile():
 def editProfile():
     error = None
     if (request.method == 'POST'):
-        # print('User.instances.user_id = ' + str(User.instances[0].id), file=sys.stderr)
-        print('pass2 = ' + str(request.form['user_password_confirm']), file=sys.stderr)
+        print('User.instances.user_id = ' + str(User.instances[0].id), file=sys.stderr)
+        # print('pass2 = ' + str(request.form['user_password_confirm']), file=sys.stderr)
         try:
             conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
             print("Successful connection to the database!")
