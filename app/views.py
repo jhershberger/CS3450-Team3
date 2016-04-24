@@ -1,5 +1,5 @@
 import flask
-from flask import Flask, render_template, flash, redirect, url_for, request, Response
+from flask import Flask, render_template, flash, redirect, url_for, request, Response, jsonify
 from app import app, login_manager
 from .forms import LoginForm
 from .models import User
@@ -10,6 +10,9 @@ import webbrowser
 import json
 import requests
 import random
+import sys
+import os
+from werkzeug import secure_filename
 
 # load the adapter
 import psycopg2
@@ -67,21 +70,6 @@ def baseUpdater():
 @app.route('/profile')
 @login_required
 def profile():
-    # try:
-    #     conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
-    #     print("Successful connection to the database!")
-    # except:
-    #     print("I am unable to connect to the database")
-
-    # cur = conn.cursor()
-    # user = current_user.first_name
-    user = str(User.instances[0].first_name) + " " + str(User.instances[0].last_name)
-    first_name = str(User.instances[0].first_name)
-    last_name = str(User.instances[0].last_name)
-    email = str(User.instances[0].email)
-    username = str(User.instances[0].username)
-    user_password = str(User.instances[0].password)
-    friendCount = _m.queryFriendCount(User.instances[0].id)
     try:
         conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
         print("Successful connection to the database!")
@@ -89,72 +77,14 @@ def profile():
         print("I am unable to connect to the database")
 
     cur = conn.cursor()
-
-    #select the users post history
-    try:
-        cur.execute('\
-            SELECT\
-                post\
-            FROM team3.posts\
-            WHERE\
-                user_id = %s\
-                AND username = %s\
-        ', (User.instances[0].id, User.instances[0].username))
-    except psycopg2 as e:
-        pass
-
-    posts = cur.fetchall()
-    return render_template("profile.html",
-                           title='Profile',
-                           user=user,
-                           email=email,
-                           username=username,
-                           friendCount=friendCount,
-                           posts=posts,
-                           currentUser = True,
-                           first_name=first_name,
-                           last_name=last_name,
-                           user_password=user_password)
-
-@app.route('/postCreate', methods=['GET','POST'])
-@login_required
-def postCreation():
-    if(request.method == 'POST'):
-        try:
-            conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
-            print("Successful connection to the database!")
-        except:
-            print("I am unable to connect to the database")
-
-        cur = conn.cursor()
-        #insert a post
-        try:
-            cur.execute('\
-                INSERT INTO team3.posts (user_id, post, username) VALUES (\
-                    %s,%s,%s)',(str(User.instances[0].id),
-                    request.form['post'],
-                    str(User.instances[0].username)))
-            conn.commit()
-        except psycopg2 as e:
-            pass
-
-    return redirect(url_for('profile'))
-    
-@app.route('/friendsProfile')
-@login_required
-def friendsProfile():
-    # try:
-    #     conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
-    #     print("Successful connection to the database!")
-    # except:
-    #     print("I am unable to connect to the database")
-
-    # cur = conn.cursor()
-    # user = current_user.first_name
     user = str(User.instances[0].first_name) + " " + str(User.instances[0].last_name)
+    first_name = str(User.instances[0].first_name)
+    last_name = str(User.instances[0].last_name)
     email = str(User.instances[0].email)
     username = str(User.instances[0].username)
+    user_password = str(User.instances[0].password)
     friendCount = _m.queryFriendCount(User.instances[0].id)
+
     posts = [  # fake array of posts
         {
             'author': {'username': 'John'},
@@ -165,35 +95,162 @@ def friendsProfile():
             'body': 'The Avengers movie was so cool!'
         }
     ]
+    print(os.getcwd() + "\\app\\static\\images\\user_images\\" + str(User.instances[0].id) + ".png", file=sys.stderr)
+    if(os.path.exists(str(os.getcwd()) + "\\app\\static\\images\\user_images\\" + str(User.instances[0].id) + ".png")):
+        User.instances[0].user_pic = "../static/images/user_images/" + str(User.instances[0].id) + ".png"
+    else:
+        User.instances[0].user_pic = "https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg"
     return render_template("profile.html",
                            title='Profile',
+                           user_id = User.instances[0].id,
                            user=user,
                            email=email,
                            username=username,
                            friendCount=friendCount,
                            posts=posts,
-                           currentUser = False,
-                           isFriend = False)
+                           currentUser = True,
+                           first_name=first_name,
+                           last_name=last_name,
+                           user_password=user_password,
+                            image_url=User.instances[0].user_pic)
 
-@app.route('/friendsList')
+@app.route('/<friend_username>Profile')
 @login_required
-def friendsList():
+def friendsProfile(friend_username):
+    try:
+        conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
+        print("Successful connection to the database!")
+    except:
+        print("I am unable to connect to the database")
+
+    cur = conn.cursor()
+
+    cur.execute("SELECT u.user_id, u.first_name, u.last_name, u.username, u.email FROM team3.user AS u WHERE u.username = '" + friend_username + "'")
+
+    user_info = cur.fetchall()
+
+    user_id = user_info[0][0]
+    first_name = user_info[0][1]
+    last_name = user_info[0][2]
+    username = user_info[0][3]
+    email = user_info[0][4]
+    friendCount = _m.queryFriendCount(user_id)
+    user = first_name + " " + last_name
+
+    #makes sure profile visited is not the current user
+    if (User.instances[0].id == user_id):
+        currentUser = True
+    else:
+        currentUser = False
+
+    #checks if users profile is a friend of current user
+    cur.execute("SELECT f.friend_id FROM team3.friends AS f WHERE f.user_id = " + str(User.instances[0].id))
+
+    friends_list = cur.fetchall()
+    if (user_id in friends_list[0][0]):
+        isFriend = True
+    else:
+        isFriend = False
+
+
+    
+
+    return render_template("profile.html",
+                           title='Profile',
+                           user_id = user_id,
+                           user = user,
+                           first_name = first_name,
+                           last_name = last_name,
+                           email=email,
+                           username=username,
+                           friendCount=friendCount,
+                           posts="",
+                           currentUser = currentUser,
+                           isFriend = isFriend)
+
+@app.route('/<friend_id>addFriend')
+@login_required
+def addFriend(friend_id):
+    try:
+        conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
+        print("Successful connection to the database!")
+    except:
+        print("I am unable to connect to the database")
+
+    cur = conn.cursor()
+
+    your_friend_size = _m.queryFriendCount(User.instances[0].id)
+    if (your_friend_size == None):
+        your_friend_size = 0
+    else:
+        your_friend_size = your_friend_size
+
+    final_string = "UPDATE team3.friends SET friend_id[" + str(your_friend_size) + "] = " + str(friend_id) + " WHERE user_id = " + str(User.instances[0].id)
+    cur.execute(final_string)
+    conn.commit()
+
+    cur.execute("SELECT u.username FROM team3.user AS u WHERE u.user_id = '" + friend_id + "'")
+
+    friend = cur.fetchall()
+
+    friend_username = friend[0][0]
+
+    exit_url = str(friend_username) + "Profile"
+
+    return redirect(exit_url)
+
+@app.route('/<friend_id>deleteFriend')
+@login_required
+def deleteFriend(friend_id):
+    try:
+        conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
+        print("Successful connection to the database!")
+    except:
+        print("I am unable to connect to the database")
+
+    cur = conn.cursor()
+
+    your_friend_size = _m.queryFriendCount(User.instances[0].id)
+    if (your_friend_size == None):
+        return redirect(str(friend_username) + "Profile")
+    else:
+        your_friend_size = your_friend_size -1
+
+    final_string = "UPDATE team3.friends SET friend_id = ARRAY_REMOVE(friend_id, " + str(friend_id) + ") WHERE user_id = " + str(User.instances[0].id)
+    cur.execute(final_string)
+    conn.commit()
+
+    cur.execute("SELECT u.username FROM team3.user AS u WHERE u.user_id = '" + friend_id + "'")
+
+    friend = cur.fetchall()
+
+    friend_username = friend[0][0]
+
+    exit_url = str(friend_username) + "Profile"
+
+    return redirect(exit_url)
+
+@app.route('/<friend_id>friendsList')
+@login_required
+def friendsList(friend_id):
     try:
         conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
         print("Successful connection to the database!")
     except:
         print("I am unable to connect to the database")
     cur = conn.cursor()
-    cur.execute("SELECT f.friend_id FROM team3.user AS u JOIN team3.friends AS f ON (f.user_id = u.user_id) WHERE u.user_id = " + str(User.instances[0].id))
+    cur.execute("SELECT f.friend_id FROM team3.user AS u JOIN team3.friends AS f ON (f.user_id = u.user_id) WHERE u.user_id = " + str(friend_id))
+    
+    ids = cur.fetchall()    
 
-    ids = cur.fetchall()
+    ids_list = ids[0][0]
 
     where_statement = ""
-    for x in range (0, len(ids[0][0])):
-        if(x == len(ids[0])):
-            where_statement += "u.user_id = " + str(ids[0][0][x])
+    for x in range (0, len(ids_list)):
+        if(x == len(ids_list)-1):
+            where_statement += "u.user_id = " + str(ids_list[x])
         else:
-            where_statement += "u.user_id = " + str(ids[0][0][x]) + " OR "
+            where_statement += "u.user_id = " + str(ids_list[x]) + " OR "
 
     if (where_statement != ""):
         cur.execute("SELECT u.first_name, u.last_name, u.username FROM team3.user AS u WHERE " + where_statement)
@@ -203,7 +260,7 @@ def friendsList():
 
         for x in range (0, len(friends)):
             friends_usernames.append(friends[x][2])
-
+        
         return render_template("friendsList.html",
                                friends = friends_usernames)
 
@@ -408,6 +465,96 @@ def login():
             login_user(User(query_result[0][0],query_result[0][1],query_result[0][2],query_result[0][3],query_result[0][4],query_result[0][5]))
             return redirect(url_for('profile'))
     return render_template('login.html', error=error)
+
+@app.route('/deleteProfile', methods=['GET', 'POST'])
+def deleteProfile():
+
+    print('EMAIL ENTERED: ' + request.form['delete_email'], file=sys.stderr)
+    print('PASSWORD ENTERED: ' + request.form['delete_pass'], file=sys.stderr)
+    if (request.method == 'POST'):
+        try:
+            conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
+            print("Successful connection to the database!")
+        except:
+            print("I am unable to connect to the database")
+
+        cur = conn.cursor()
+        cur.execute('\
+                        SELECT *\
+                        FROM team3.user\
+                        WHERE\
+                            (email = %s OR username = %s)\
+                            AND pass = %s\
+                    ',(request.form['delete_email'],request.form['delete_email'],request.form['delete_pass']))
+
+        if (len(cur.fetchall()) <= 0):
+            return redirect('profile?pass_error=1')
+        else:
+            cur = conn.cursor()
+            cur.execute('\
+                            DELETE FROM team3.user\
+                            WHERE (email = %s\
+                            OR username = %s)\
+                        ',(request.form['delete_email'],request.form['delete_email']))
+            conn.commit()
+            return redirect(url_for('logout'))
+    return redirect(url_for('profile'))
+
+
+
+@app.route('/editProfile', methods=['GET', 'POST'])
+def editProfile():
+    error = None
+    if (request.method == 'POST'):
+        print('User.instances.user_id = ' + str(User.instances[0].id), file=sys.stderr)
+        # print('pass2 = ' + str(request.form['user_password_confirm']), file=sys.stderr)
+        try:
+            conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
+            print("Successful connection to the database!")
+        except:
+            print("I am unable to connect to the database")
+        cur = conn.cursor()
+
+        try:
+            cur.execute('\
+                            UPDATE team3.user SET\
+                            username = %s,\
+                            email = %s,\
+                            first_name = %s,\
+                            last_name = %s,\
+                            pass = %s\
+                            WHERE user_id = %s\
+                        ', (request.form['username'],
+                            request.form['email'],
+                            request.form['first_name'],
+                            request.form['last_name'],
+                            request.form['user_password'],
+                            User.instances[0].id))
+            conn.commit()
+        except psycopg2 as e:
+            pass
+
+        User.instances[0].username = request.form['username']
+        User.instances[0].email = request.form['email']
+        User.instances[0].first_name = request.form['first_name']
+        User.instances[0].last_name = request.form['last_name']
+        User.instances[0].password = request.form['user_password']
+        return redirect(url_for('profile'))
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ['png','jpg']
+
+@app.route('/upload_photo', methods=['GET', 'POST'])
+def upload_photo():
+    if request.method == 'POST':
+        file = request.files['file']
+        if file and allowed_file(file.filename):
+            filename = str(User.instances[0].id) + ".png"
+            file.save(os.path.join(str(os.getcwd()) + "\\app\\static\\images\\user_images", filename))
+            return redirect(url_for('profile',
+                                    filename=filename))
+
 
 @app.route('/create', methods=['GET', 'POST'])
 def creation():
