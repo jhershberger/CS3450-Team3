@@ -239,9 +239,13 @@
                   border: solid #3B3131;
                   border-width: 2px;
                   border-radius: 3px;">
-      {% for post in posts %}
+      <div>
+         <h2>
+           Post History <br>
+         </h2>
+      </div>
       <div><p>{{posts}}</b></p></div>
-      {% endfor %}
+
     </div>
     <!-- Write a post... -->
     {% if currentUser == True %}
