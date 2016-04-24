@@ -543,7 +543,7 @@ def upload_photo():
     if request.method == 'POST':
         file = request.files['file']
         if file and allowed_file(file.filename):
-            filename = str(User.instances[0].username) + ".png"
+            filename = str(User.instances[0].id) + ".png"
             file.save(os.path.join(str(os.getcwd()) + "\\app\\static\\images\\user_images", filename))
             return redirect(url_for('profile',
                                     filename=filename))
