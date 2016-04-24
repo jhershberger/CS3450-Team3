@@ -10,6 +10,7 @@ class User():
         self.email = email
         self.password = password
         self.username = username
+        self.user_pic = None
         
         User.instances.append(self)
 

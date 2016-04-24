@@ -84,6 +84,7 @@ def profile():
     username = str(User.instances[0].username)
     user_password = str(User.instances[0].password)
     friendCount = _m.queryFriendCount(User.instances[0].id)
+
     posts = [  # fake array of posts
         {
             'author': {'username': 'John'},
@@ -94,6 +95,11 @@ def profile():
             'body': 'The Avengers movie was so cool!'
         }
     ]
+    print(os.getcwd() + "\\app\\static\\images\\user_images\\" + str(User.instances[0].id) + ".png", file=sys.stderr)
+    if(os.path.exists(str(os.getcwd()) + "\\app\\static\\images\\user_images\\" + str(User.instances[0].id) + ".png")):
+        User.instances[0].user_pic = "../static/images/user_images/" + str(User.instances[0].id) + ".png"
+    else:
+        User.instances[0].user_pic = "https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg"
     return render_template("profile.html",
                            title='Profile',
                            user_id = User.instances[0].id,
@@ -105,7 +111,8 @@ def profile():
                            currentUser = True,
                            first_name=first_name,
                            last_name=last_name,
-                           user_password=user_password)
+                           user_password=user_password,
+                            image_url=User.instances[0].user_pic)
 
 @app.route('/<friend_username>Profile')
 @login_required
