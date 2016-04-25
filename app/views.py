@@ -371,16 +371,36 @@ def movieUpdate():
     year = title.year
     rating = title.rating
     actors = title.cast_summary
-    names = ""
-    for x in range(0, len(actors)):
-        names += str(actors[x].name) + ", "
+    names = []
+    aIDs = []
+    for x in range(0, 4):
+        names.append(actors[x].name)
+        aIDs.append(actors[x].imdb_id)
 
     genre = title.genres[0]
     runtime = int(title.runtime/60)
     plot = title.plot_outline
     director = str(title.directors_summary[0].name)
 
-    return render_template("moviePage.html", title=title.title, year=year, plot=plot, rating=rating,runtime=runtime, director=director, img=url, actor=names, genre=genre)
+    return render_template("moviePage.html", title=title.title, year=year, plot=plot, rating=rating,runtime=runtime, director=director, img=url, actor=names, ids=aIDs, genre=genre)  # render the moviePage template
+
+@app.route('/actorUpdate',methods=['POST','GET'])
+def actorUpdate():
+    global key
+
+    aID = request.form['truly']
+    actor = imdb.get_person_by_id(aID)
+
+    name = actor.name
+
+    image = imdb.get_person_images(aID)
+    imgsrc = image[0].url
+    imgh = image[0].height
+    imgw = image[0].width
+    imgttl = image[0].caption
+
+
+    return render_template("actorPage.html", name=name, imgsrc=imgsrc, imgh=imgh, imgw=imgw, imgttl=imgttl, id=aID)
 
 imdb = Imdb()
 imdb = Imdb(anonymize=True)
@@ -405,16 +425,18 @@ def moviePage():
         year = t["year"]
         rating = t["rating"]
         actors = title.cast_summary
-        names = ""
-        for x in range(0, len(actors)):
-            names += str(actors[x].name) + ", "
+        names = []
+        aIDs = []
+        for x in range(0, 4):
+            names.append(actors[x].name)
+            aIDs.append(actors[x].imdb_id)
 
         genre = title.genres[0]
         runtime = int(title.runtime/60)
         plot = title.plot_outline
         director = str(title.directors_summary[0].name)
 
-        return render_template("moviePage.html", title=t["title"], year=year, plot=plot, rating=rating,runtime=runtime, director=director, img=url, actor=names, genre=genre)  # render the moviePage template
+        return render_template("moviePage.html", title=t["title"], year=year, plot=plot, rating=rating,runtime=runtime, director=director, img=url, actor=names, ids=aIDs, genre=genre)  # render the moviePage template
 
 @app.route('/rateMovie',methods=['POST','GET'])
 def rateMovie():

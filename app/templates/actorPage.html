@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<table cellspacing="0" cellpadding="0" border="0" id="name-overview-widget-layout">
+  <tbody>
+    <tr>
+      <td rowspan="2" id="img_primary">
+        <div class="image">
+        <img id="name-poster" height={{imgh/4}} width={{imgw/4}} alt={{imgttl}} title={{imgttl}} src={{imgsrc}} itemprop="image">
+        </div>
+      </td>
+      <td id="overview-top">
+
+  <h1 class="header"> <span class="itemprop" itemprop="name">{{name}}</span></h1>
+
+  <hr>
+    <div class="txt-block" id="name-bio-text">
+      <div class="name-trivia-bio-text">
+        <div class="inline" itemprop="description"><h3>
+Actor description/bio goes here once I figure out how to make an API call that returns it.
+        </h3></div>
+      </div>
+    </div>
+
+      </td>
+    </tr>
+    <tr>
+      <td id="overview-middle">
+        <h2>Well-known Roles Include:</h2>
+<h3>List of famous roles in movies goes here once I figure out how to make an API call that returns that info.</h3>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+{% endblock %}
