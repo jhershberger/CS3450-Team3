@@ -397,6 +397,14 @@ def actorUpdate():
 
     return render_template("actorPage.html", name=name, imgsrc=imgsrc, imgh=imgh, imgw=imgw, imgttl=imgttl, id=aID)
 
+@app.route('/about')
+def about():
+    return render_template("about.html")
+
+@app.route('/contact')
+def contact():
+    return render_template("contact.html")
+
 imdb = Imdb()
 imdb = Imdb(anonymize=True)
 @app.route('/moviePage')
