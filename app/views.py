@@ -12,6 +12,7 @@ import requests
 import random
 import sys
 import os
+import re
 from werkzeug import secure_filename
 
 # load the adapter
@@ -85,14 +86,6 @@ def profile():
     user_password = str(User.instances[0].password)
     friendCount = _m.queryFriendCount(User.instances[0].id)
 
-    try:
-        conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
-        print("Successful connection to the database!")
-    except:
-        print("I am unable to connect to the database")
-
-    cur = conn.cursor()
-
     #select the users post history
     try:
         cur.execute('\
@@ -107,9 +100,11 @@ def profile():
         pass
 
     results = cur.fetchall()
-    posts = ""
-    for post in results:
-        posts += str(post)
+    posts = re.findall(r"[0-9]|[\w]|[\s]", str(results))
+    post = ""
+    for x in range(0, len(posts)):
+        post += posts[x]
+
 
     print(os.getcwd() + "\\app\\static\\images\\user_images\\" + str(User.instances[0].id) + ".png", file=sys.stderr)
     if(os.path.exists(str(os.getcwd()) + "\\app\\static\\images\\user_images\\" + str(User.instances[0].id) + ".png")):
@@ -123,7 +118,7 @@ def profile():
                            email=email,
                            username=username,
                            friendCount=friendCount,
-                           posts=posts,
+                           posts=post,
                            currentUser = True,
                            first_name=first_name,
                            last_name=last_name,
