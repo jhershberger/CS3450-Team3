@@ -8,7 +8,16 @@
       <h2>Title: {{title}}</h2>
       <img class= "poster_image_search" src = {{img}}>
       <h2>Director: {{director}}</h2>
-      <h2>Actors/Actresses:{{actor}} </h2>
+      <h2>Lead Actors/Actresses:</h2>
+      <h3><form id= "form1" action = "/actorUpdate" method="post"><input type = "hidden" id= "thisOne" name= "truly" value="{{ids[0]}}"></form>
+        <form action = "/actorUpdate" method= "post"><a href="javascript:{}" onclick= "document.getElementById('form1').submit();">{{actor[0]}}</a><input type = "hidden" id="thisOne" name = "truly" value="{{ids[0]}}"></form></h3>
+      <h3><form id= "form2" action = "/actorUpdate" method="post"><input type = "hidden" id= "thisOne" name= "truly" value="{{ids[1]}}"></form>
+        <form action = "/actorUpdate" method= "post"><a href="javascript:{}" onclick= "document.getElementById('form2').submit();">{{actor[1]}}</a><input type = "hidden" id="thisOne" name = "truly" value="{{ids[1]}}"></form></h3>
+      <h3><form id= "form3" action = "/actorUpdate" method="post"><input type = "hidden" id= "thisOne" name= "truly" value="{{ids[2]}}"></form>
+        <form action = "/actorUpdate" method= "post"><a href="javascript:{}" onclick= "document.getElementById('form3').submit();">{{actor[2]}}</a><input type = "hidden" id="thisOne" name = "truly" value="{{ids[2]}}"></form></h3>
+      <h3><form id= "form4" action = "/actorUpdate" method="post"><input type = "hidden" id= "thisOne" name= "truly" value="{{ids[3]}}"></form>
+        <form action = "/actorUpdate" method= "post"><a href="javascript:{}" onclick= "document.getElementById('form4').submit();">{{actor[3]}}</a><input type = "hidden" id="thisOne" name = "truly" value="{{ids[3]}}"></form></h3>
+
       <h2>Our Rating: Too Good</h2>
       <h2>IMDB Rating: {{rating}}</h2>
       <h2>Year: {{year}}</h2>
