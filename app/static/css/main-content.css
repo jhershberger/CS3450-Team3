@@ -37,7 +37,13 @@
 	margin-top: 0px;
 	outline:1px solid black;
 }
-
+.contain{
+	display:inline-block;
+}
+.search_bar{
+	position:relative;
+	margin-bottom:5%;
+}
 #creation{
 	display: block;
 	position: relative;
