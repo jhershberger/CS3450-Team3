@@ -1,3 +1,25 @@
+#post-container{
+	width: 50%;
+	padding: 2px;
+	height: 30%;
+	margin-top: 10%
+	margin-right: 0;
+	margin-left: 2%;
+	margin-bottom: 5px;
+	outline: 1px solid black;
+}
+
+#write-container{
+	width: 50%;
+	padding: 2px;
+	height: 40%;
+	margin-top: 1%
+	margin-right: 0;
+	margin-left: 2%;
+	margin-bottom: 5px;
+	outline: 1px solid black;
+}
+
 .edit-form-btn {
 	color: #286090;
 }

@@ -103,10 +103,9 @@ def profile():
         pass
 
     results = cur.fetchall()
-    posts = re.findall(r"[0-9]|[\w]|[\s]", str(results))
-    post = ""
-    for x in range(0, len(posts)):
-        post += posts[x]
+    posts = []
+    for x in range(0, len(results)):
+        posts.append(str(results[x]))
 
 
     print(os.getcwd() + "\\app\\static\\images\\user_images\\" + str(User.instances[0].id) + ".png", file=sys.stderr)
@@ -121,7 +120,7 @@ def profile():
                            email=email,
                            username=username,
                            friendCount=friendCount,
-                           posts=post,
+                           posts=posts,
                            currentUser = True,
                            first_name=first_name,
                            last_name=last_name,
