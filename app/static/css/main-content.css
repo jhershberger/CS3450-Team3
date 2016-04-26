@@ -20,6 +20,26 @@
 	outline: 1px solid black;
 }
 
+.pull--right {
+	float: right !important;
+	margin-top: 7%;
+}
+
+.pull--left {
+	float: left !important;
+	margin-top: 7%;
+	margin-left: 1px;
+	margin-right: 1px;
+}
+
+.jh-btn {
+	background: #3399ff;
+	border: solid 1px #CCC;
+	height: 25px;
+	text-align: center;
+	width: 75px;
+}
+
 .edit-form-btn {
 	color: #286090;
 }
