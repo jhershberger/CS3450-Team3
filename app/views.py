@@ -386,6 +386,40 @@ def actorUpdate():
     aID = request.form['truly']
     actor = imdb.get_person_by_id(aID)
 
+    #image stuff
+    PERSON_PATTERN = 'http://api.themoviedb.org/3/find/{aID}?external_source=imdb_id&api_key={key}'
+    # print (KEY)
+    r = requests.get(PERSON_PATTERN.format(key=KEY,aID=aID))
+    api_response = r.json()
+
+    tmdbid = api_response['person_results'][0]['id']
+
+    TMDB_PERSON_PATTERN = 'http://api.themoviedb.org/3/person/{tmdbid}?api_key={key}'
+    r = requests.get(TMDB_PERSON_PATTERN.format(key=KEY, tmdbid=tmdbid))
+    api_response = r.json()
+
+    bio = api_response['biography']
+    bio = bio[0:575] + "..."
+    birthplace = api_response['place_of_birth']
+
+    TMDB_PATTERN = 'http://api.themoviedb.org/3/person/{tmdbid}/movie_credits?api_key={key}'
+    r = requests.get(TMDB_PATTERN.format(key=KEY,tmdbid=tmdbid))
+    api_response = r.json()
+
+    roles = []
+    movies = []
+    moviesID = []
+    cast = api_response['cast']
+    for x in range (0, 4):
+        roles.append(cast[x]['character'])
+        movies.append(cast[x]['title'])
+        movieID = cast[x]['id']
+        TMDB_PATTERN = 'http://api.themoviedb.org/3/movie/{movieID}?api_key={key}'
+        r = requests.get(TMDB_PATTERN.format(key=KEY,movieID=movieID))
+        api_response = r.json()
+        imdbID = api_response['imdb_id']
+        moviesID.append(imdbID)
+
     name = actor.name
 
     image = imdb.get_person_images(aID)
@@ -395,7 +429,7 @@ def actorUpdate():
     imgttl = image[0].caption
 
 
-    return render_template("actorPage.html", name=name, imgsrc=imgsrc, imgh=imgh, imgw=imgw, imgttl=imgttl, id=aID)
+    return render_template("actorPage.html", name=name, bio=bio, birth=birthplace, roles=roles, movies=movies, moviesID=moviesID, imgsrc=imgsrc, imgh=imgh, imgw=imgw, imgttl=imgttl)
 
 @app.route('/about')
 def about():

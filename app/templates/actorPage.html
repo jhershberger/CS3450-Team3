@@ -5,30 +5,43 @@
 <table cellspacing="0" cellpadding="0" border="0" id="name-overview-widget-layout">
   <tbody>
     <tr>
-      <td rowspan="2" id="img_primary">
+      <td rowspan="1" id="img_primary">
+          <h1 class="header"> <span class="itemprop" itemprop="name">{{name}}</span></h1>
         <div class="image">
         <img id="name-poster" height={{imgh/4}} width={{imgw/4}} alt={{imgttl}} title={{imgttl}} src={{imgsrc}} itemprop="image">
         </div>
       </td>
       <td id="overview-top">
 
-  <h1 class="header"> <span class="itemprop" itemprop="name">{{name}}</span></h1>
+
 
   <hr>
     <div class="txt-block" id="name-bio-text">
       <div class="name-trivia-bio-text">
-        <div class="inline" itemprop="description"><h3>
-Actor description/bio goes here once I figure out how to make an API call that returns it.
-        </h3></div>
+        <div class="inline" itemprop="description">
+          <h2>Bio: </h2>
+          <h3>{{bio}}</h3>
+        </div>
       </div>
     </div>
+      <h2>Born in: </h2><h3>{{birth}}</h3>
 
       </td>
     </tr>
+      <th>{{imgttl}}</th>
     <tr>
       <td id="overview-middle">
-        <h2>Well-known Roles Include:</h2>
-<h3>List of famous roles in movies goes here once I figure out how to make an API call that returns that info.</h3>
+        <h2>Other Roles Include:</h2>
+      </td>
+      <td>
+        <h3><form id= "form1" action = "/movieUpdate" method="post"><input type = "hidden" id= "thisOne" name= "really" value="{{moviesID[0]}}"></form>
+          {{roles[0]}} in <form action = "/movieUpdate" method= "post"><a href="javascript:{}" onclick= "document.getElementById('form1').submit();">{{movies[0]}}</a><input type = "hidden" id="thisOne" name = "really" value="{{moviesID[0]}}"></form></h3>
+        <h3><form id= "form2" action = "/movieUpdate" method="post"><input type = "hidden" id= "thisOne" name= "really" value="{{moviesID[1]}}"></form>
+          {{roles[1]}} in <form action = "/movieUpdate" method= "post"><a href="javascript:{}" onclick= "document.getElementById('form2').submit();">{{movies[1]}}</a><input type = "hidden" id="thisOne" name = "really" value="{{moviesID[1]}}"></form></h3>
+        <h3><form id= "form3" action = "/movieUpdate" method="post"><input type = "hidden" id= "thisOne" name= "really" value="{{moviesID[2]}}"></form>
+          {{roles[2]}} in <form action = "/movieUpdate" method= "post"><a href="javascript:{}" onclick= "document.getElementById('form3').submit();">{{movies[2]}}</a><input type = "hidden" id="thisOne" name = "really" value="{{moviesID[2]}}"></form></h3>
+        <h3><form id= "form4" action = "/movieUpdate" method="post"><input type = "hidden" id= "thisOne" name= "really" value="{{moviesID[3]}}"></form>
+          {{roles[3]}} in <form action = "/movieUpdate" method= "post"><a href="javascript:{}" onclick= "document.getElementById('form4').submit();">{{movies[3]}}</a><input type = "hidden" id="thisOne" name = "really" value="{{moviesID[3]}}"></form></h3>
       </td>
     </tr>
   </tbody>
