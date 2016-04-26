@@ -86,14 +86,6 @@ def profile():
     user_password = str(User.instances[0].password)
     friendCount = _m.queryFriendCount(User.instances[0].id)
 
-    try:
-        conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
-        print("Successful connection to the database!")
-    except:
-        print("I am unable to connect to the database")
-
-    cur = conn.cursor()
-
     #select the users post history
     try:
         cur.execute('\
@@ -108,9 +100,11 @@ def profile():
         pass
 
     results = cur.fetchall()
-    posts = ""
-    for post in results:
-        posts += str(post)
+    posts = re.findall(r"[0-9]|[\w]|[\s]", str(results))
+    post = ""
+    for x in range(0, len(posts)):
+        post += posts[x]
+
 
     print(os.getcwd() + "\\app\\static\\images\\user_images\\" + str(User.instances[0].id) + ".png", file=sys.stderr)
     if(os.path.exists(str(os.getcwd()) + "\\app\\static\\images\\user_images\\" + str(User.instances[0].id) + ".png")):
@@ -124,7 +118,7 @@ def profile():
                            email=email,
                            username=username,
                            friendCount=friendCount,
-                           posts=posts,
+                           posts=post,
                            currentUser = True,
                            first_name=first_name,
                            last_name=last_name,
@@ -406,6 +400,40 @@ def actorUpdate():
     aID = request.form['truly']
     actor = imdb.get_person_by_id(aID)
 
+    #image stuff
+    PERSON_PATTERN = 'http://api.themoviedb.org/3/find/{aID}?external_source=imdb_id&api_key={key}'
+    # print (KEY)
+    r = requests.get(PERSON_PATTERN.format(key=KEY,aID=aID))
+    api_response = r.json()
+
+    tmdbid = api_response['person_results'][0]['id']
+
+    TMDB_PERSON_PATTERN = 'http://api.themoviedb.org/3/person/{tmdbid}?api_key={key}'
+    r = requests.get(TMDB_PERSON_PATTERN.format(key=KEY, tmdbid=tmdbid))
+    api_response = r.json()
+
+    bio = api_response['biography']
+    bio = bio[0:575] + "..."
+    birthplace = api_response['place_of_birth']
+
+    TMDB_PATTERN = 'http://api.themoviedb.org/3/person/{tmdbid}/movie_credits?api_key={key}'
+    r = requests.get(TMDB_PATTERN.format(key=KEY,tmdbid=tmdbid))
+    api_response = r.json()
+
+    roles = []
+    movies = []
+    moviesID = []
+    cast = api_response['cast']
+    for x in range (0, 4):
+        roles.append(cast[x]['character'])
+        movies.append(cast[x]['title'])
+        movieID = cast[x]['id']
+        TMDB_PATTERN = 'http://api.themoviedb.org/3/movie/{movieID}?api_key={key}'
+        r = requests.get(TMDB_PATTERN.format(key=KEY,movieID=movieID))
+        api_response = r.json()
+        imdbID = api_response['imdb_id']
+        moviesID.append(imdbID)
+
     name = actor.name
 
     image = imdb.get_person_images(aID)
@@ -415,7 +443,15 @@ def actorUpdate():
     imgttl = image[0].caption
 
 
-    return render_template("actorPage.html", name=name, imgsrc=imgsrc, imgh=imgh, imgw=imgw, imgttl=imgttl, id=aID)
+    return render_template("actorPage.html", name=name, bio=bio, birth=birthplace, roles=roles, movies=movies, moviesID=moviesID, imgsrc=imgsrc, imgh=imgh, imgw=imgw, imgttl=imgttl)
+
+@app.route('/about')
+def about():
+    return render_template("about.html")
+
+@app.route('/contact')
+def contact():
+    return render_template("contact.html")
 
 imdb = Imdb()
 imdb = Imdb(anonymize=True)
