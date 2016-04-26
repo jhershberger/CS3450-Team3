@@ -533,40 +533,54 @@ def rateMovie():
             print ("imdb id we passed in: " + str(imdbid) + "imdb id in database" + str(item[1]))
             # if 42 == float(userIDstripped) and imdbid == item[1]:
             if float(User.instances[0].id) == float(userIDstripped) and imdbid == item[1]:
-                print ("WE DER")
-
-                cur.execute('SELECT user_rated FROM team3.movies WHERE movie_id= %s', (imdbid,))
-                userRATE = cur.fetchall()
-                print (userRATE)
-                newU=[]
-                newU.append(userRATE[0])
-                newU.append(userrated)
-                print (newU)
-                cur.execute('\
-                    UPDATE team3.movies SET user_rated = %s WHERE movie_id = %s',(newU,item[1]))
-                conn.commit()
                 cur.execute('SELECT rating, user_rated FROM team3.movies WHERE movie_id = %s',(str(imdbid),))
                 ratingAndUserRated = cur.fetchall()
                 print (ratingAndUserRated)
-                print (ratingAndUserRated[0][1][1])
-                total = 0
-                if len(ratingAndUserRated[0][1]) > 2:
-                    for x in range(0,len(ratingAndUserRated[0][1])):
-                        print (ratingAndUserRated[0][1][1+x])
-                        total += float(ratingAndUserRated[0][1][1+x])
-                if len(ratingAndUserRated[0][1]) == 2:
-                    print ("Returning")
-                    cur.execute('\
-                        UPDATE team3.movies SET rating = %s WHERE movie_id = %s',(rating,item[1]))
-                    conn.commit()
-                    return redirect(url_for('index'))
+                if len(ratingAndUserRated[0][1]) == 1:
+                    divideValue = 2
                 else:
-                    print ("Dividing by "+ str(len(ratingAndUserRated[0][1])))
                     divideValue = float(len(ratingAndUserRated[0][1]))
-                newTotal = total/divideValue
+                newRating = (float(ratingAndUserRated[0][0])+ float(rating))/divideValue
+                print (newRating)
                 cur.execute('\
-                    UPDATE team3.movies SET rating = %s WHERE movie_id = %s',(newTotal,str(imdbid)))
+                    UPDATE team3.movies SET user_rated = array_append(user_rated,%s) WHERE movie_id = %s',(userrated,str(imdbid)))
+                cur.execute('\
+                    UPDATE team3.movies SET rating = %s WHERE movie_id = %s',(newRating,str(imdbid)))
                 conn.commit()
+                # print ("WE DER")
+                #
+                # cur.execute('SELECT user_rated FROM team3.movies WHERE movie_id= %s', (imdbid,))
+                # userRATE = cur.fetchall()
+                # print (userRATE)
+                # newU=[]
+                # newU.append(userRATE[0])
+                # newU.append(userrated)
+                # print (newU)
+                # cur.execute('\
+                #     UPDATE team3.movies SET user_rated = %s WHERE movie_id = %s',(newU,item[1]))
+                # conn.commit()
+                # cur.execute('SELECT rating, user_rated FROM team3.movies WHERE movie_id = %s',(str(imdbid),))
+                # ratingAndUserRated = cur.fetchall()
+                # print (ratingAndUserRated)
+                # print (ratingAndUserRated[0][1][1])
+                # total = 0
+                # if len(ratingAndUserRated[0][1]) > 2:
+                #     for x in range(0,len(ratingAndUserRated[0][1])):
+                #         print (ratingAndUserRated[0][1][1+x])
+                #         total += float(ratingAndUserRated[0][1][1+x])
+                # if len(ratingAndUserRated[0][1]) == 2:
+                #     print ("Returning")
+                #     cur.execute('\
+                #         UPDATE team3.movies SET rating = %s WHERE movie_id = %s',(rating,item[1]))
+                #     conn.commit()
+                #     return redirect(url_for('index'))
+                # else:
+                #     print ("Dividing by "+ str(len(ratingAndUserRated[0][1])))
+                #     divideValue = float(len(ratingAndUserRated[0][1]))
+                # newTotal = total/divideValue
+                # cur.execute('\
+                #     UPDATE team3.movies SET rating = %s WHERE movie_id = %s',(newTotal,str(imdbid)))
+                # conn.commit()
                 return redirect(url_for('index'))
     cur.execute('SELECT rating, user_rated FROM team3.movies WHERE movie_id = %s',(str(imdbid),))
     ratingAndUserRated = cur.fetchall()
