@@ -12,6 +12,7 @@ import requests
 import random
 import sys
 import os
+import re
 from werkzeug import secure_filename
 
 # load the adapter
@@ -318,7 +319,7 @@ def testSERVER():
     newList10 = []
 
     for x in range(0,10):
-        rand = randint(0,249)
+        rand = randint(0,25)
         list10.append(list250[rand])
 
     # temp = imdb.get_title_by_id(id)
@@ -326,6 +327,7 @@ def testSERVER():
     titles = []
     scores = []
     ids = []
+    ourratings = []
     # directors= []
     # print (list10)
     for item in list10:
@@ -348,8 +350,21 @@ def testSERVER():
         titles.append(item["title"])
         ids.append(imdbid)
         # print (newList10[x])
+        try:
+            conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
+            print("Successful connection to the database!")
+        except:
+            print("I am unable to connect to the database")
+        cur = conn.cursor()
+        cur.execute('SELECT rating FROM team3.movies WHERE movie_id = %s',(imdbid,))
+        rate = cur.fetchall()
+        if len(rate) ==0:
+            ourratings.append(0)
+        else:
+            print (rate)
+            ourratings.append(rate[0])
 
-    return json.dumps({'status':'OK','list':newList10,'title':titles,'score':scores,'ids':ids})
+    return json.dumps({'status':'OK','list':newList10,'title':titles,'score':scores,'ids':ids,'ourscore':ourratings})
 
 
 @app.route('/movieUpdate',methods=['POST','GET'])
@@ -439,11 +454,102 @@ def moviePage():
         return render_template("moviePage.html", title=t["title"], year=year, plot=plot, rating=rating,runtime=runtime, director=director, img=url, actor=names, ids=aIDs, genre=genre)  # render the moviePage template
 
 @app.route('/rateMovie',methods=['POST','GET'])
+# @login_required
 def rateMovie():
     print("HI")
+
     rating = request.form['score']
+    imdbid = request.form['hide']
+    userrated = '{'+str(User.instances[0].id) + ','+ str(rating)+'}'
+    # userrated = '{42,'+ str(rating)+'}'
     print (rating)
-    return json.dumps({'status':'OK','score':rating})
+    print (imdbid)
+    try:
+        conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
+        print("Successful connection to the database!")
+    except:
+        print("I am unable to connect to the database")
+    cur = conn.cursor()
+    cur.execute('SELECT COUNT(*) FROM team3.movies WHERE movie_id = %s',(imdbid,))
+    count = cur.fetchall()
+    print (count[0][0])
+    # countStripped = re.sub('[),(]','',count)
+    if count[0][0] == 0:
+        cur.execute('\
+            INSERT INTO team3.movies(movie_id, rating, user_rated) VALUES (\
+                %s,%s,%s)',(imdbid,
+                rating,
+                userrated))
+        conn.commit()
+        return redirect(url_for('index'))
+    cur.execute('SELECT user_rated, movie_id FROM team3.movies')
+    listUserRated = cur.fetchall()
+    print (listUserRated)
+    for item in listUserRated:
+        for x in item[0]:
+            total =0
+            print (x)
+            separateComma = x.split(',')
+            userID = separateComma[0]
+            userIDstripped = re.sub('[}"{]','',userID)
+            # print ("user instances is: 42 and userid is" + str(userIDstripped))
+            print ("user instances is: " +str(User.instances[0].id) + "and userid is" + str(userIDstripped))
+            print ("imdb id we passed in: " + str(imdbid) + "imdb id in database" + str(item[1]))
+            # if 42 == float(userIDstripped) and imdbid == item[1]:
+            if float(User.instances[0].id) == float(userIDstripped) and imdbid == item[1]:
+                print ("WE DER")
+
+                cur.execute('SELECT user_rated FROM team3.movies WHERE movie_id= %s', (imdbid,))
+                userRATE = cur.fetchall()
+                print (userRATE)
+                newU=[]
+                newU.append(userRATE[0])
+                newU.append(userrated)
+                print (newU)
+                cur.execute('\
+                    UPDATE team3.movies SET user_rated = %s WHERE movie_id = %s',(newU,item[1]))
+                conn.commit()
+                cur.execute('SELECT rating, user_rated FROM team3.movies WHERE movie_id = %s',(str(imdbid),))
+                ratingAndUserRated = cur.fetchall()
+                print (ratingAndUserRated)
+                print (ratingAndUserRated[0][1][1])
+                total = 0
+                if len(ratingAndUserRated[0][1]) > 2:
+                    for x in range(0,len(ratingAndUserRated[0][1])):
+                        print (ratingAndUserRated[0][1][1+x])
+                        total += float(ratingAndUserRated[0][1][1+x])
+                if len(ratingAndUserRated[0][1]) == 2:
+                    print ("Returning")
+                    cur.execute('\
+                        UPDATE team3.movies SET rating = %s WHERE movie_id = %s',(rating,item[1]))
+                    conn.commit()
+                    return redirect(url_for('index'))
+                else:
+                    print ("Dividing by "+ str(len(ratingAndUserRated[0][1])))
+                    divideValue = float(len(ratingAndUserRated[0][1]))
+                newTotal = total/divideValue
+                cur.execute('\
+                    UPDATE team3.movies SET rating = %s WHERE movie_id = %s',(newTotal,str(imdbid)))
+                conn.commit()
+                return redirect(url_for('index'))
+    cur.execute('SELECT rating, user_rated FROM team3.movies WHERE movie_id = %s',(str(imdbid),))
+    ratingAndUserRated = cur.fetchall()
+    print (ratingAndUserRated)
+    if len(ratingAndUserRated[0][1]) == 1:
+        divideValue = 2
+    else:
+        divideValue = float(len(ratingAndUserRated[0][1]))
+    newRating = (float(ratingAndUserRated[0][0])+ float(rating))/divideValue
+    print (newRating)
+    cur.execute('\
+        UPDATE team3.movies SET user_rated = array_append(user_rated,%s) WHERE movie_id = %s',(userrated,str(imdbid)))
+    cur.execute('\
+        UPDATE team3.movies SET rating = %s WHERE movie_id = %s',(newRating,str(imdbid)))
+    conn.commit()
+
+
+
+    return redirect(url_for('index'))
 
 @app.route('/BasicSearchResults',methods=['POST'])
 def BasicSearchResults():

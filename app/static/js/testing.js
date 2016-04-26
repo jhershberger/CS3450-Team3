@@ -23,7 +23,7 @@ $(document).ready(function(){
 				while(i<10){
 					// console.log(i)
 					// console.log(obj.list[i]);
-					appendDom(obj.list[i],obj.title[i],obj.score[i],obj.ids[i],i);
+					appendDom(obj.list[i],obj.title[i],obj.score[i],obj.ids[i],i,obj.ourscore[i]);
 
 					i++;
 				}
@@ -57,7 +57,7 @@ $(document).ready(function(){
 
 
 
-function appendDom(response,title,score,id,i){
+function appendDom(response,title,score,id,i,ourscore){
 	$('#main-block').append(
 		'<div class = "row new_block">'
 			+ '<div class ="col-sm-4"><form action = "/movieUpdate" method="post">'
@@ -66,6 +66,7 @@ function appendDom(response,title,score,id,i){
 			+'<form class = "rate_movie" action="/rateMovie" method="post">'
 		 +'<span id="val'+i+'">0</span>'
 		 + '<input type = "hidden" id= "rating'+i+'" name= "score" value="k">'
+		 +'<input id="hiddenId" input type="hidden" name="hide" value="'+id+'">'
 		 +'<button type="submit" class="btn btn-primary">Rate This Movie!</button>'
 			+'</form></div>'
 				+ '</img><div class= "ratings_box">'
@@ -78,7 +79,8 @@ function appendDom(response,title,score,id,i){
 					+'}'
 					+'</script>'
 					+	'</div></div><div class="col-sm-8"><h1>'+ title +'</h1>'
-					+'<h1 id="main-score">'+ score +'</h1>'
+					+'<h2 id="main-score">ImDbs Rating: '+ score +'</h1>'
+					+'<h2 id="main-score">Sloths Rating: '+ ourscore + '</h1>'
 						+ '</div>' + '</div>')
 }
 
