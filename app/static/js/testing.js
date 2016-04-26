@@ -1,10 +1,5 @@
 
 $(document).ready(function(){
-
-	// $("#rating_sloth1").mouseover(function(){
-  //        $("#rating_sloth").css("opacity", 1);
-  //    });
-
 		var id = $('#id-input').val()
 		$.ajax({
 			type: 'POST',
@@ -31,27 +26,7 @@ $(document).ready(function(){
 				// appendDom(obj.url);
 			}
 		});
-		$.ajax({
-			type: 'POST',
-			url: '/baseUpdater',
-			async: true,
-			success: function(response) {
-				var obj = JSON.parse(response);
-				var i=0;
 
-				while(i<10){
-					// console.log(i)
-					// console.log(obj.list[i]);
-					appendDom2(obj.title[i]);
-					appendDom3(obj.besttitles[i]);
-
-					i++;
-				}
-
-
-				$("#loading").hide();
-			}
-		});
 
 });
 
@@ -64,10 +39,10 @@ function appendDom(response,title,score,id,i,ourscore){
 			+ '<input type = "hidden" id= "thisOne" name= "really" value="'+id+'">'
 			+ '<div class="contain"><input class="poster_image" type ="image" src="' + response + '"></form>'
 			+'<form class = "rate_movie" action="/rateMovie" method="post">'
-		 +'<span id="val'+i+'">0</span>'
 		 + '<input type = "hidden" id= "rating'+i+'" name= "score" value="k">'
 		 +'<input id="hiddenId" input type="hidden" name="hide" value="'+id+'">'
 		 +'<button type="submit" class="btn btn-primary">Rate This Movie!</button>'
+		  +'<span id="val'+i+'">0</span>'
 			+'</form></div>'
 				+ '</img><div class= "ratings_box">'
 					+ '<input id="slider" type="range" min="0" max="10" value="0" step=".5" onchange="showValue'+i+'(this.value)"/>'
@@ -82,13 +57,4 @@ function appendDom(response,title,score,id,i,ourscore){
 					+'<h2 id="main-score">ImDbs Rating: '+ score +'</h1>'
 					+'<h2 id="main-score">Sloths Rating: '+ ourscore + '</h1>'
 						+ '</div>' + '</div>')
-}
-
-function appendDom2(title){
-	$('#top-ten-list-friends').append(
-		'<li>'+title+'</li>')
-}
-function appendDom3(besttitle){
-	$('#top-ten-list').append(
-		'<li>'+besttitle+'</li>')
 }

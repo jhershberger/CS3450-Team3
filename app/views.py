@@ -49,6 +49,7 @@ def baseUpdater():
     list10 = []
     newList10 = []
     besttitles = []
+    ids= []
     print ("We're here")
     for x in range(0,10):
         rand = randint(0,249)
@@ -60,13 +61,15 @@ def baseUpdater():
     # print (list10)
     for item in list10:
         imdbid = item["tconst"]
-
+        ids.append(imdbid)
         titles.append(item["title"])
     for item in newList10:
+        imdbid = item["tconst"]
+        ids.append(imdbid)
         besttitles.append(item["title"])
 
 
-    return json.dumps({'status':'OK','title':titles,'besttitles':besttitles})
+    return json.dumps({'status':'OK','title':titles,'besttitles':besttitles,'ids':ids})
 
 @app.route('/profile')
 @login_required
