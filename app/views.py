@@ -90,22 +90,19 @@ def profile():
     friendCount = _m.queryFriendCount(User.instances[0].id)
 
     #select the users post history
-    try:
-        cur.execute('\
-            SELECT\
-                post\
-            FROM team3.posts\
-            WHERE\
-                user_id = %s\
-                AND username = %s\
-        ', (User.instances[0].id, User.instances[0].username))
-    except psycopg2 as e:
-        pass
-
+    cur.execute('\
+        SELECT\
+            post\
+        FROM team3.posts\
+        WHERE\
+            user_id = ' + str(User.instances[0].id))
     results = cur.fetchall()
+
     posts = []
-    for x in range(0, len(results)):
-        posts.append(str(results[x]))
+    for x in range (0, len(results)):
+        posts.append("")
+        for y in range (0, len(results[x])):
+            posts[x] += results[x][y]
 
 
     print(os.getcwd() + "\\app\\static\\images\\user_images\\" + str(User.instances[0].id) + ".png", file=sys.stderr)
@@ -191,22 +188,19 @@ def friendsProfile(friend_username):
 
 
     #select the users post history
-    try:
-        cur.execute('\
-            SELECT\
-                post\
-            FROM team3.posts\
-            WHERE\
-                user_id = %s\
-                AND username = %s\
-        ', (User.instances[0].id, User.instances[0].username))
-    except psycopg2 as e:
-        pass
-
+    cur.execute('\
+        SELECT\
+            post\
+        FROM team3.posts\
+        WHERE\
+            user_id = ' + str(user_id))
     results = cur.fetchall()
+
     posts = []
-    for x in range(0, len(results)):
-        posts.append(str(results[x]))
+    for x in range (0, len(results)):
+        posts.append("")
+        for y in range (0, len(results[x])):
+            posts[x] += results[x][y]
 
 
     return render_template("profile.html",

@@ -225,15 +225,17 @@
 
       {% if currentUser == True %}
       <div id = "write-container">
-         <h2>
-           Post History <br>
-         </h2>
          <form action="\postCreate" method = "POST">
            <textarea cols = "50" rows = "6" value = "{{request.form.post}}" name = "post" placeholder="Write a Post" ></textarea>
            <input type="submit" value="Submit">
          </form>
       </div>
       {% endif %}
+
+
+         <h2>
+           Post History <br>
+         </h2>
 
       {% for post in posts %}
             <div id = "post-container">
