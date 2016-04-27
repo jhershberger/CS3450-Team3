@@ -452,6 +452,11 @@ def testSERVER():
 
 @app.route('/movieUpdate',methods=['POST','GET'])
 def movieUpdate():
+    try:
+        conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
+        print("Successful connection to the database!")
+    except:
+        print("I am unable to connect to the database")
     global key
 
     imdbid = request.form['really']
@@ -480,7 +485,20 @@ def movieUpdate():
     plot = title.plot_outline
     director = str(title.directors_summary[0].name)
 
-    return render_template("moviePage.html", title=title.title, year=year, plot=plot, rating=rating,runtime=runtime, director=director, img=url, actor=names, ids=aIDs, genre=genre,id= imdbid)  # render the moviePage template
+    cur = conn.cursor()
+    cur.execute('SELECT rating FROM team3.movies WHERE movie_id = %s',(imdbid,))
+    rate = cur.fetchall()
+    mrate = 0
+    if len(rate) == 0:
+        mrate = 0
+    else:
+        # print (rate)
+        mrate = rate[0]
+
+    print ("mrate: ")
+    print (mrate)
+
+    return render_template("moviePage.html", title=title.title, year=year, plot=plot, rating=rating, ourrating=mrate, runtime=runtime, director=director, img=url, actor=names, ids=aIDs, genre=genre,id= imdbid)  # render the moviePage template
 
 @app.route('/actorUpdate',methods=['POST','GET'])
 def actorUpdate():
