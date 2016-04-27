@@ -334,7 +334,7 @@ def testSERVER():
     list10 = []
     newList10 = []
     for x in range(0,10):
-        list10.append(list250[randint(1,250)])
+        list10.append(list250[randint(1,249)])
     # id = request.form['var']
     cur = conn.cursor()
     if not User.instances:
@@ -345,7 +345,7 @@ def testSERVER():
         # directors= []
         print (list10)
         for item in list10:
-            print("here we are")
+            # print("here we are")
             imdbid = item["tconst"]
             # imdbid = item
             # title = imdb.get_title_by_id(imdbid)
@@ -415,10 +415,10 @@ def testSERVER():
         ids = []
         ourratings = []
         # directors= []
-        print (list10)
+        # print (list10)
         for item in list10:
             imdbid = item
-            print (imdbid)
+            # print (imdbid)
             title = imdb.get_title_by_id(imdbid)
             # print (imdbid)
             IMG_PATTERN = 'http://api.themoviedb.org/3/movie/{imdbid}/images?api_key={key}'
@@ -480,7 +480,7 @@ def movieUpdate():
     plot = title.plot_outline
     director = str(title.directors_summary[0].name)
 
-    return render_template("moviePage.html", title=title.title, year=year, plot=plot, rating=rating,runtime=runtime, director=director, img=url, actor=names, ids=aIDs, genre=genre)  # render the moviePage template
+    return render_template("moviePage.html", title=title.title, year=year, plot=plot, rating=rating,runtime=runtime, director=director, img=url, actor=names, ids=aIDs, genre=genre,id= imdbid)  # render the moviePage template
 
 @app.route('/actorUpdate',methods=['POST','GET'])
 def actorUpdate():
@@ -583,6 +583,8 @@ def moviePage():
 def rateMovie():
     print("HI")
     total = 0
+    if not User.instances:
+        return redirect(url_for('login'))
     rating = request.form['score']
     imdbid = request.form['hide']
     userrated = '{'+str(rating)+'}'

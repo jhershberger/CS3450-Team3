@@ -7,6 +7,21 @@
   <div id="movie-info">
       <h2>Title: {{title}}</h2>
       <img class= "poster_image_search" src = {{img}}>
+      <form class = "rate_movie" action="/rateMovie" method="post">
+		 <input type = "hidden" id= "rating" name= "score" value="k">
+		 <input id="hiddenId" input type="hidden" name="hide" value="{{id}}">
+		 <button type="submit" class="btn btn-primary">Rate This Movie!</button>
+		  <span id='val'>0</span>
+			</form>
+      <div class= "ratings_box">
+      <input id="slider" type="range" min="0" max="10" value="0" step=".5" onchange="showValue(this.value)"/>
+      <script type="text/javascript">
+      function showValue(newValue)
+      {
+        document.getElementById("val").innerHTML=newValue;
+        document.getElementById("rating").value=newValue;
+      }
+      </script>
       <h2>Director: {{director}}</h2>
       <h2>Lead Actors/Actresses:</h2>
       <h3><form id= "form1" action = "/actorUpdate" method="post"><input type = "hidden" id= "thisOne" name= "truly" value="{{ids[0]}}"></form>
