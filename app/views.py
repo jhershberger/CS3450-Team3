@@ -418,16 +418,16 @@ def testSERVER():
         # print (list10)
         for item in list10:
             imdbid = item
-            # print (imdbid)
+            #print (imdbid)
             title = imdb.get_title_by_id(imdbid)
-            # print (imdbid)
+            print (imdbid)
             IMG_PATTERN = 'http://api.themoviedb.org/3/movie/{imdbid}/images?api_key={key}'
-            # print (KEY)
+            #print (KEY)
             r = requests.get(IMG_PATTERN.format(key=KEY,imdbid=imdbid))
             api_response = r.json()
 
             rel_path = api_response['posters'][0]['file_path']
-            # print (posters)
+            #print (posters)
             poster_urls= []
             url = "{0}{1}{2}".format(base_url, max_size, rel_path)
             poster_urls.append(url)
@@ -436,16 +436,16 @@ def testSERVER():
             # directors.append(title.directors_summary[0].name)
             titles.append(title.title)
             ids.append(imdbid)
-            # print (newList10[x])
+            #print (newList10[x])
 
             cur = conn.cursor()
             cur.execute('SELECT rating FROM team3.movies WHERE movie_id = %s',(imdbid,))
             rate = cur.fetchall()
-            if len(rate) ==0:
-                ourratings.append(0)
-            else:
-                # print (rate)
-                ourratings.append(rate[0])
+            for x in range (0, len(rate)):
+                ourratings.append("")
+                for y in range (0, len(rate[x])):
+                    ourratings[x] += str(rate[x][y])
+
 
         return json.dumps({'status':'OK','list':newList10,'title':titles,'score':scores,'ids':ids,'ourscore':ourratings,'names':namesList})
 
@@ -488,17 +488,14 @@ def movieUpdate():
     cur = conn.cursor()
     cur.execute('SELECT rating FROM team3.movies WHERE movie_id = %s',(imdbid,))
     rate = cur.fetchall()
-    mrate = 0
-    if len(rate) == 0:
-        mrate = 0
-    else:
-        # print (rate)
-        mrate = rate[0]
+    ourrating = []
+    for x in range (0, len(rate)):
+        ourrating.append("")
+        for y in range (0, len(rate[x])):
+            ourrating[x] += str(rate[x][y])
 
-    print ("mrate: ")
-    print (mrate)
 
-    return render_template("moviePage.html", title=title.title, year=year, plot=plot, rating=rating, ourrating=mrate, runtime=runtime, director=director, img=url, actor=names, ids=aIDs, genre=genre,id= imdbid)  # render the moviePage template
+    return render_template("moviePage.html", title=title.title, year=year, plot=plot, rating=rating, ourrating=ourrating, runtime=runtime, director=director, img=url, actor=names, ids=aIDs, genre=genre,id= imdbid)  # render the moviePage template
 
 @app.route('/actorUpdate',methods=['POST','GET'])
 def actorUpdate():
