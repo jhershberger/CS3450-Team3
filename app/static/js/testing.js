@@ -12,13 +12,13 @@ $(document).ready(function(){
 				// console.log(response);
 				var obj = JSON.parse(response);
 				// console.log(obj.list)
-				// console.log(obj);
+				console.log(obj);
 				// console.log(obj.list);
 				var i=0;
 				while(i<10){
 					// console.log(i)
 					// console.log(obj.list[i]);
-					appendDom(obj.list[i],obj.title[i],obj.score[i],obj.ids[i],i,obj.ourscore[i]);
+					appendDom(obj.list[i],obj.title[i],obj.score[i],obj.ids[i],i,obj.ourscore[i],obj.names[i]);
 
 					i++;
 				}
@@ -32,7 +32,7 @@ $(document).ready(function(){
 
 
 
-function appendDom(response,title,score,id,i,ourscore){
+function appendDom(response,title,score,id,i,ourscore,name){
 	$('#main-block').append(
 		'<div class = "row new_block">'
 			+ '<div class ="col-sm-4"><form action = "/movieUpdate" method="post">'
@@ -53,7 +53,7 @@ function appendDom(response,title,score,id,i,ourscore){
 						+'document.getElementById("rating'+i+'").value=newValue;'
 					+'}'
 					+'</script>'
-					+	'</div></div><div class="col-sm-8"><h1>'+ title +'</h1>'
+					+	'</div></div><div class="col-sm-8"><h3>'+name+ '</h3><h1>'+ title +'</h1>'
 					+'<h2 id="main-score">ImDbs Rating: '+ score +'</h1>'
 					+'<h2 id="main-score">Sloths Rating: '+ ourscore + '</h1>'
 						+ '</div>' + '</div>')

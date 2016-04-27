@@ -318,61 +318,136 @@ def friendsList(friend_id):
 
 @app.route('/testSERVER', methods=['POST'])
 def testSERVER():
-    global key
-    global title
-    # id = request.form['var']
-    list250 = imdb.top_250()
-    list10 = []
-    newList10 = []
-
-    for x in range(0,10):
-        rand = x+1
-        list10.append(list250[rand])
-
-    # temp = imdb.get_title_by_id(id)
-    # print (temp.poster_url)
-    titles = []
-    scores = []
-    ids = []
-    ourratings = []
-    # directors= []
-    # print (list10)
     try:
         conn = psycopg2.connect("dbname='kdjbimsf' user='kdjbimsf' host='pellefant-01.db.elephantsql.com' password='UwW8KkPi2TdrSmlxWMw54ARzmDFSXIFL'")
         print("Successful connection to the database!")
     except:
         print("I am unable to connect to the database")
-    for item in list10:
-        imdbid = item["tconst"]
-        # title = imdb.get_title_by_id(imdbid)
-        # print (imdbid)
-        IMG_PATTERN = 'http://api.themoviedb.org/3/movie/{imdbid}/images?api_key={key}'
-        # print (KEY)
-        r = requests.get(IMG_PATTERN.format(key=KEY,imdbid=imdbid))
-        api_response = r.json()
+    global key
+    global title
+    imdb = Imdb()
+    imdb = Imdb(anonymize = True)
+    list250 = imdb.top_250()
 
-        rel_path = api_response['posters'][0]['file_path']
-        # print (posters)
-        poster_urls= []
-        url = "{0}{1}{2}".format(base_url, max_size, rel_path)
-        poster_urls.append(url)
-        newList10.append(poster_urls)
-        scores.append(item["rating"])
-        # directors.append(title.directors_summary[0].name)
-        titles.append(item["title"])
-        ids.append(imdbid)
-        # print (newList10[x])
+    newMovieList = []
+    namesList = []
+    list10 = []
+    newList10 = []
+    for x in range(0,10):
+        list10.append(list250[randint(1,250)])
+    # id = request.form['var']
+    cur = conn.cursor()
+    if not User.instances:
+        titles = []
+        scores = []
+        ids = []
+        ourratings = []
+        # directors= []
+        print (list10)
+        for item in list10:
+            print("here we are")
+            imdbid = item["tconst"]
+            # imdbid = item
+            # title = imdb.get_title_by_id(imdbid)
+            # print (imdbid)
+            IMG_PATTERN = 'http://api.themoviedb.org/3/movie/{imdbid}/images?api_key={key}'
+            # print (KEY)
+            r = requests.get(IMG_PATTERN.format(key=KEY,imdbid=imdbid))
+            api_response = r.json()
 
-        cur = conn.cursor()
-        cur.execute('SELECT rating FROM team3.movies WHERE movie_id = %s',(imdbid,))
-        rate = cur.fetchall()
-        if len(rate) ==0:
-            ourratings.append(0)
-        else:
-            print (rate)
-            ourratings.append(rate[0])
+            rel_path = api_response['posters'][0]['file_path']
+            # print (posters)
+            poster_urls= []
+            url = "{0}{1}{2}".format(base_url, max_size, rel_path)
+            poster_urls.append(url)
+            newList10.append(poster_urls)
+            scores.append(item["rating"])
+            # directors.append(title.directors_summary[0].name)
+            titles.append(item["title"])
+            ids.append(imdbid)
+            # print (newList10[x])
+            namesList.append(" ")
+            cur = conn.cursor()
+            cur.execute('SELECT rating FROM team3.movies WHERE movie_id = %s',(imdbid,))
+            rate = cur.fetchall()
+            if len(rate) ==0:
+                ourratings.append(0)
+            else:
+                # print (rate)
+                ourratings.append(rate[0])
 
-    return json.dumps({'status':'OK','list':newList10,'title':titles,'score':scores,'ids':ids,'ourscore':ourratings})
+        return json.dumps({'status':'OK','list':newList10,'title':titles,'score':scores,'ids':ids,'ourscore':ourratings,'names':namesList})
+    else:
+        list10 = []
+        cur.execute('SELECT friend_id FROM team3.friends WHERE user_id = %s ',(User.instances[0].id,))
+        listOfFriends = cur.fetchall()
+        print(listOfFriends[0][0])
+        for item in listOfFriends[0][0]:
+            random.seed(1000)
+            # print (item)
+            cur.execute('SELECT moviesrated FROM team3.user WHERE user_id =%s ',(item,))
+
+
+            tempList = cur.fetchall()
+            cur.execute('SELECT first_name, last_name FROM team3.user WHERE user_id =%s ',(item,))
+            name = cur.fetchall()
+            # print (name[0][0])
+            fullname = name[0][0]+name[0][1]
+            namesList.append(fullname + " rated:")
+            # print (tempList[0][0])
+            random1 = randint(1,len(tempList[0][0]))
+            # print ("length is" + str(len(tempList[0][0])))
+            # print (random1)
+            # print (tempList[0][0][random1-1])
+            newMovieList.append(tempList[0][0][random1-1])
+        if len(newMovieList)<10:
+            difference = 10 - len(newMovieList)
+            for x in range(0,difference):
+                newMovieList.append(list250[randint(1,250)]["tconst"])
+                namesList.append("Sloth rated: ")
+
+
+        for x in range(0,len(newMovieList)):
+            # rand = x+1
+            list10.append(newMovieList[x])
+        titles = []
+        scores = []
+        ids = []
+        ourratings = []
+        # directors= []
+        print (list10)
+        for item in list10:
+            imdbid = item
+            print (imdbid)
+            title = imdb.get_title_by_id(imdbid)
+            # print (imdbid)
+            IMG_PATTERN = 'http://api.themoviedb.org/3/movie/{imdbid}/images?api_key={key}'
+            # print (KEY)
+            r = requests.get(IMG_PATTERN.format(key=KEY,imdbid=imdbid))
+            api_response = r.json()
+
+            rel_path = api_response['posters'][0]['file_path']
+            # print (posters)
+            poster_urls= []
+            url = "{0}{1}{2}".format(base_url, max_size, rel_path)
+            poster_urls.append(url)
+            newList10.append(poster_urls)
+            scores.append(title.rating)
+            # directors.append(title.directors_summary[0].name)
+            titles.append(title.title)
+            ids.append(imdbid)
+            # print (newList10[x])
+
+            cur = conn.cursor()
+            cur.execute('SELECT rating FROM team3.movies WHERE movie_id = %s',(imdbid,))
+            rate = cur.fetchall()
+            if len(rate) ==0:
+                ourratings.append(0)
+            else:
+                # print (rate)
+                ourratings.append(rate[0])
+
+        return json.dumps({'status':'OK','list':newList10,'title':titles,'score':scores,'ids':ids,'ourscore':ourratings,'names':namesList})
 
 
 @app.route('/movieUpdate',methods=['POST','GET'])
